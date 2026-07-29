@@ -1,0 +1,45 @@
+{% extends "layouts/dashboard.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Mes notifications</h2>
+
+    {% if notifications %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for notification in notifications %}
+                <tr>
+                    <td>{{ notification.title }}</td>
+                    <td>{{ notification.message }}</td>
+                    <td>{{ notification.created_at }}</td>
+                    <td>
+                        {% if notification.is_read %}
+                            <span class="badge bg-success">Lue</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Non lue</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            Vous n'avez aucune notification.
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

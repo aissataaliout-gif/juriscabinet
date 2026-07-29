@@ -1,0 +1,39 @@
+{% extends "layouts/dashboard.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Boîte de réception</h2>
+
+    {% if messages_received %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Expéditeur</th>
+                    <th>Sujet</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for message in messages_received %}
+                <tr>
+                    <td>{{ message.sender }}</td>
+                    <td><a href="{% url 'message_detail' message.id %}">
+        {{ message.subject }}
+    </a></td>
+                    <td>{{ message.sent_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            Aucun message reçu.
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

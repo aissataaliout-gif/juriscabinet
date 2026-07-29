@@ -1,0 +1,62 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Liste des clients{% endblock %}
+
+{% block dashboard_content %}
+
+<h2>Liste des clients</h2>
+
+<div class="mb-3">
+    <a href="{% url 'client_create' %}" class="btn btn-success">
+        ➕ Nouveau client
+    </a>
+</div>
+
+<table class="table table-bordered table-striped mt-4">
+
+    <thead>
+        <tr>
+    <th>Nom</th>
+    <th>Prénom</th>
+    <th>Téléphone</th>
+    <th>Email</th>
+    <th>Profession</th>
+    <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for client in clients %}
+
+        <tr>
+            <td>{{ client.last_name }}</td>
+    <td>{{ client.first_name }}</td>
+    <td>{{ client.phone }}</td>
+    <td>{{ client.email }}</td>
+    <td>{{ client.profession }}</td>
+    <td>
+        <a href="{% url 'client_update' client.id %}" class="btn btn-warning btn-sm">
+            ✏️ Modifier
+        </a>
+        <a href="{% url 'client_delete' client.id %}" class="btn btn-danger btn-sm">
+           🗑️ Supprimer
+        </a>
+    </td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5" class="text-center">
+                Aucun client enregistré.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

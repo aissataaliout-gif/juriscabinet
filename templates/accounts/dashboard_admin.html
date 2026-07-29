@@ -1,0 +1,42 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block dashboard_content %}
+
+<h2>Bienvenue {{ request.user.username }}</h2>
+
+<p>Vous êtes connecté en tant qu'administrateur.</p>
+
+<div class="row mt-4">
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Clients</h5>
+                <h2>0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Avocats</h5>
+                <h2>0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Dossiers</h5>
+                <h2>0</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

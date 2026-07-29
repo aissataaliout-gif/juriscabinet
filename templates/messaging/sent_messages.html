@@ -1,0 +1,37 @@
+{% extends "layouts/dashboard.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Messages envoyés</h2>
+
+    {% if sent_messages %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Destinataire</th>
+                    <th>Sujet</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for message in sent_messages %}
+                <tr>
+                    <td>{{ message.receiver }}</td>
+                    <td>{{ message.subject }}</td>
+                    <td>{{ message.sent_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            Vous n'avez envoyé aucun message.
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

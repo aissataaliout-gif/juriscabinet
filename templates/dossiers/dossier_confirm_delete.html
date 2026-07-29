@@ -1,0 +1,28 @@
+{% extends "layouts/dashboard.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Supprimer un dossier</h2>
+
+    <p>
+        Êtes-vous sûr de vouloir supprimer le dossier
+        <strong>{{ dossier.title }}</strong> ?
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-danger">
+            Oui, supprimer
+        </button>
+
+        <a href="{% url 'dossier_list' %}" class="btn btn-secondary">
+            Annuler
+        </a>
+    </form>
+
+</div>
+
+{% endblock %}

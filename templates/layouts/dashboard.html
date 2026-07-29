@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-md-3 bg-dark text-white min-vh-100 p-4">
+
+            <h3>JurisCabinet</h3>
+            <hr>
+
+            <ul class="nav flex-column">
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white" href="#">🏠 Tableau de bord</a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white" href="#">👥 Clients</a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white" href="#">⚖️ Avocats</a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white" href="#">📁 Dossiers</a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white" href="#">📅 Rendez-vous</a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white" href="#">📄 Documents</a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white" href="#">💳 Facturation</a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white" href="#">💬 Messagerie</a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white" href="#">🔔 Notifications</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="col-md-9 p-4">
+
+            {% block dashboard_content %}
+            {% endblock %}
+            {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

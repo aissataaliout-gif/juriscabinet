@@ -1,0 +1,25 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Nouveau client{% endblock %}
+
+{% block dashboard_content %}
+
+<h2>Ajouter un client</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">
+        Enregistrer
+    </button>
+
+    <a href="{% url 'client_list' %}" class="btn btn-secondary">
+        Retour
+    </a>
+
+</form>
+
+{% endblock %}
