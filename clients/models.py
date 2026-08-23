@@ -1,11 +1,21 @@
 from django.db import models
-
+from django.conf import settings
+from accounts.models import User
 
 class Client(models.Model):
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="client_profile",
+        null=True,
+        blank=True,
+   )
+
     GENDER_CHOICES = [
-        ('M', 'Masculin'),
-        ('F', 'Féminin'),
-    ]
+            ('M', 'Masculin'),
+            ('F', 'Féminin'),
+        ]
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -16,9 +26,12 @@ class Client(models.Model):
     address = models.TextField()
     profession = models.CharField(max_length=100)
     identity_number = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='clients/', blank=True, null=True)
+    photo = models.ImageField(
+        upload_to='clients/', 
+        blank=True, null=True
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+            return f"{self.first_name} {self.last_name}"

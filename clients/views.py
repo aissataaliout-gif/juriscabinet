@@ -3,6 +3,13 @@ from .models import Client
 from .forms import ClientForm
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
+from dossiers.models import Dossier
+from appointments.models import Appointment
+from documents.models import Document
+from billing.models import Invoice
+
+
 def client_list(request):
     clients = Client.objects.all()
     return render(request, "clients/client_list.html", {
@@ -51,3 +58,30 @@ def client_delete(request, pk):
     return render(request, "clients/client_confirm_delete.html", {
         "client": client
     })
+
+@login_required
+def client_dashboard(request):
+    client = request.user.client_profile
+
+    dossiers = Dossier.objects.filter(client=client)
+    documents = Document.objects.filter(dossier__client=client)
+    invoices = Invoice.objects.filter(dossier__client=client)
+    appointments = Appointment.objects.filter(dossier__client=client)
+
+    context = {
+        "client": client,
+        "dossiers": dossiers,
+        "documents": documents,
+        "invoices": invoices,
+        "appointments": appointments,
+        "dossiers_count": dossiers.count(),
+        "documents_count": documents.count(),
+        "invoices_count": invoices.count(),
+        "appointments_count": appointments.count(),
+    }
+
+    return render(
+        request,
+        "clients/client_dashboard.html",
+        context,
+    )

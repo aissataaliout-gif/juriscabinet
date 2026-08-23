@@ -2,51 +2,87 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
     <h2>Liste des rendez-vous</h2>
 
-    <a href="{% url 'appointment_create' %}" class="btn btn-success mb-3">
-        ➕ Nouveau rendez-vous
-    </a>
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Dossier</th>
-                <th>Date et heure</th>
-                <th>Lieu</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-        {% for appointment in appointments %}
-            <tr>
-                <td>{{ appointment.title }}</td>
-                <td>{{ appointment.dossier }}</td>
-                <td>{{ appointment.appointment_date }}</td>
-                <td>{{ appointment.location }}</td>
-                <td>
-    <a href="{% url 'appointment_update' appointment.id %}" class="btn btn-warning btn-sm">
-        ✏️ Modifier
-    </a>
-    <a href="{% url 'appointment_delete' appointment.id %}" class="btn btn-danger btn-sm">
-        🗑️ Supprimer
-    </a>
-</td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="4" class="text-center">
-                    Aucun rendez-vous enregistré.
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% if request.user.role == "ADMIN" or request.user.role == "LAWYER" %}
+        <a href="{% url 'appointment_create' %}" class="btn btn-success">
+            ➕ Nouveau rendez-vous
+        </a>
+    {% endif %}
 
 </div>
+
+{% if appointments %}
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Dossier</th>
+            <th>Date et heure</th>
+            <th>Lieu</th>
+
+            {% if request.user.role == "ADMIN" or request.user.role == "LAWYER" %}
+                <th>Actions</th>
+            {% endif %}
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for appointment in appointments %}
+
+        <tr>
+
+            <td>{{ appointment.title }}</td>
+
+            <td>{{ appointment.dossier }}</td>
+
+            <td>
+                {{ appointment.appointment_date|date:"d/m/Y H:i" }}
+            </td>
+
+            <td>{{ appointment.location }}</td>
+
+            {% if request.user.role == "ADMIN" or request.user.role == "LAWYER" %}
+
+                <td>
+
+                    <a
+                        href="{% url 'appointment_update' appointment.id %}"
+                        class="btn btn-warning btn-sm"
+                    >
+                        ✏️ Modifier
+                    </a>
+
+                    <a
+                        href="{% url 'appointment_delete' appointment.id %}"
+                        class="btn btn-danger btn-sm"
+                    >
+                        🗑️ Supprimer
+                    </a>
+
+                </td>
+
+            {% endif %}
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% else %}
+
+<div class="alert alert-info">
+    Aucun rendez-vous disponible.
+</div>
+
+{% endif %}
 
 {% endblock %}

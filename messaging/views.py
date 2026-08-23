@@ -9,7 +9,7 @@ from notifications.models import Notification
 @login_required
 def message_create(request):
     if request.method == "POST":
-        form = MessageForm(request.POST)
+        form = MessageForm(request.POST, user=request.user)
 
         if form.is_valid():
             message = form.save(commit=False)
@@ -26,7 +26,7 @@ def message_create(request):
             return redirect("message_create")
 
     else:
-        form = MessageForm()
+        form = MessageForm(user=request.user)
 
     return render(
         request,

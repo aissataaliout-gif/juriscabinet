@@ -1,0 +1,362 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Dashboard Premium{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="container-fluid py-4">
+
+   <div class="bg-primary bg-gradient text-white rounded-4 p-5 mb-5 shadow-lg">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+        <div>
+            <h2 class="fw-bold mb-2">
+                <i class="bi bi-stars"></i>
+                Dashboard Premium
+            </h2>
+
+            <p class="mb-0 fs-5">
+                Bienvenue dans <strong>JurisCabinet</strong>. Gérez votre cabinet avec élégance, rapidité et sécurité.
+            </p>
+        </div>
+
+        <div class="text-end mt-3 mt-md-0">
+            <i class="bi bi-shield-check display-1 opacity-75"></i>
+        </div>
+
+    </div>
+
+</div>
+<div class="row g-4">
+
+    <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+
+        <div class="card border-0 rounded-4 shadow-lg text-white h-100"
+             style="background: linear-gradient(135deg,#2563eb,#4f46e5);">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <small class="text-white-50">Clients</small>
+
+                        <h1 class="fw-bold mt-2 mb-0">
+                            {{ clients_count }}
+                        </h1>
+
+                        <p class="mb-0 mt-2">
+                            Total des clients
+                        </p>
+                    </div>
+
+                    <i class="bi bi-people-fill display-3 opacity-75"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+
+    <div class="card border-0 rounded-4 shadow-lg text-white h-100"
+         style="background: linear-gradient(135deg,#7c3aed,#a855f7);">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <small class="text-white-50">Avocats</small>
+
+                    <h1 class="fw-bold mt-2 mb-0">
+                        {{ lawyers_count }}
+                    </h1>
+
+                    <p class="mb-0 mt-2">
+                        Total des avocats
+                    </p>
+                </div>
+
+                <i class="bi bi-person-badge-fill display-3 opacity-75"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+
+    <div class="card border-0 rounded-4 shadow-lg text-dark h-100"
+         style="background: linear-gradient(135deg,#fbbf24,#f59e0b);">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <small class="text-dark opacity-75">Dossiers</small>
+
+                    <h1 class="fw-bold mt-2 mb-0">
+                        {{ dossiers_count }}
+                    </h1>
+
+                    <p class="mb-0 mt-2">
+                        Dossiers actifs
+                    </p>
+                </div>
+
+                <i class="bi bi-folder-fill display-3 opacity-75"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+
+    <div class="card border-0 rounded-4 shadow-lg text-white h-100"
+         style="background: linear-gradient(135deg,#ef4444,#dc2626);">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <small class="text-white-50">Rendez-vous</small>
+
+                    <h1 class="fw-bold mt-2 mb-0">
+                        {{ appointments_count }}
+                    </h1>
+
+                    <p class="mb-0 mt-2">
+                        Rendez-vous prévus
+                    </p>
+                </div>
+
+                <i class="bi bi-calendar-check-fill display-3 opacity-75"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+
+    <div class="card border-0 rounded-4 shadow-lg text-white h-100"
+         style="background: linear-gradient(135deg,#06b6d4,#0891b2);">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <small class="text-white-50">Documents</small>
+
+                    <h1 class="fw-bold mt-2 mb-0">
+                        {{ documents_count }}
+                    </h1>
+
+                    <p class="mb-0 mt-2">
+                        Documents enregistrés
+                    </p>
+                </div>
+
+                <i class="bi bi-file-earmark-text-fill display-3 opacity-75"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+<div class="row mt-5">
+
+    <div class="col-lg-8 mb-4">
+
+        <div class="card border-0 rounded-4 shadow-lg">
+
+            <div class="card-header border-0 rounded-top-4 text-white py-3"
+     style="background: linear-gradient(135deg,#1e3a8a,#2563eb);">
+                <div class="d-flex justify-content-between align-items-center">
+
+    <h4 class="mb-0 fw-bold">
+        <i class="bi bi-folder2-open"></i>
+        Derniers dossiers
+    </h4>
+
+    <a href="{% url 'dossier_list' %}"
+       class="btn btn-light btn-sm rounded-pill">
+        Voir tout
+    </a>
+
+</div>
+            </div>
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+    <thead class="table-light">
+
+        <tr>
+            <th><i class="bi bi-hash"></i> Référence</th>
+            <th><i class="bi bi-person"></i> Client</th>
+            <th><i class="bi bi-flag"></i> Statut</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for dossier in recent_dossiers %}
+
+        <tr>
+
+            <td>
+                <strong>{{ dossier.reference }}</strong>
+            </td>
+
+            <td>
+                <i class="bi bi-person-circle text-primary"></i>
+                {{ dossier.client }}
+            </td>
+
+            <td>
+
+                {% if dossier.status == "EN_COURS" %}
+
+                    <span class="badge rounded-pill bg-success">
+                        En cours
+                    </span>
+
+                {% elif dossier.status == "EN_ATTENTE" %}
+
+                    <span class="badge rounded-pill bg-warning text-dark">
+                        En attente
+                    </span>
+
+                {% elif dossier.status == "TERMINE" %}
+
+                    <span class="badge rounded-pill bg-primary">
+                        Terminé
+                    </span>
+
+                {% else %}
+
+                    <span class="badge rounded-pill bg-secondary">
+                        {{ dossier.status }}
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+
+            <td colspan="3" class="text-center py-5 text-muted">
+
+                <i class="bi bi-folder-x display-5"></i>
+
+                <br><br>
+
+                Aucun dossier disponible.
+
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+                </div>
+
+            </div>
+           
+                    </div>
+
+    </div>
+
+    <!-- Notifications -->
+    <div class="col-lg-4 mb-4">
+
+        <div class="card border-0 rounded-4 shadow-lg h-100">
+
+            <div class="card-header border-0 rounded-top-4 text-white py-3"
+                 style="background: linear-gradient(135deg,#7c3aed,#4f46e5);">
+
+                <h4 class="mb-0 fw-bold">
+                    <i class="bi bi-bell-fill"></i>
+                    Notifications
+                </h4>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-3">
+                    <i class="bi bi-person-plus-fill text-success"></i>
+                    Nouveau client ajouté
+                </div>
+
+                <hr>
+
+                <div class="mb-3">
+                    <i class="bi bi-folder-fill text-warning"></i>
+                    Nouveau dossier créé
+                </div>
+
+                <hr>
+
+                <div class="mb-3">
+                    <i class="bi bi-calendar-event text-primary"></i>
+                    Rendez-vous aujourd'hui
+                </div>
+
+                <hr>
+
+                <div>
+                    <i class="bi bi-file-earmark-check-fill text-info"></i>
+                    Nouveau document ajouté
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

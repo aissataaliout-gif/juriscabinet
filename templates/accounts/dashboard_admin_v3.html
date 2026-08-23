@@ -1,0 +1,317 @@
+{% extends 'layouts/dashboard.html' %} 
+{% block title %}Dashboard Premium{%endblock %} 
+{% block dashboard_content %}
+
+<style>
+  .dashboard-card{
+    border:none;
+    border-radius:22px;
+    overflow:hidden;
+    transition:all .35s ease;
+    cursor:pointer;
+    position:relative;
+}
+
+.dashboard-card::before{
+    content:"";
+    position:absolute;
+    top:-60%;
+    right:-30%;
+    width:180px;
+    height:180px;
+    background:rgba(255,255,255,.12);
+    border-radius:50%;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-10px) scale(1.03);
+    box-shadow:0 20px 45px rgba(0,0,0,.22)!important;
+}
+
+.dashboard-card .card-body{
+    padding:25px;
+}
+
+.dashboard-card small{
+    font-size:.95rem;
+    letter-spacing:.5px;
+}
+
+.dashboard-card h1{
+    font-size:3rem;
+    font-weight:800;
+    margin:10px 0;
+}
+
+.dashboard-card p{
+    font-size:1rem;
+    margin-bottom:0;
+}
+
+.dashboard-card i{
+    font-size:4rem;
+    opacity:.85;
+}
+</style>
+
+<div class="container-fluid py-4">
+  <div class="bg-primary bg-gradient text-white rounded-4 p-5 mb-5 shadow-lg">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div>
+        <h2 class="fw-bold mb-2">
+          <i class="bi bi-stars"></i> Dashboard Premium
+        </h2>
+        <p class="mb-0 fs-5">
+          Bienvenue dans <strong>JurisCabinet</strong>. Gérez votre cabinet avec
+          élégance, rapidité et sécurité.
+        </p>
+      </div>
+      <i class="bi bi-shield-check display-1 opacity-75"></i>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-5">
+    
+   <div class="row row-cols-1 row-cols-md-2 row-cols-xl-5 g-4 mb-5">
+
+    <!-- Clients -->
+    <div class="col">
+        <div class="card dashboard-card text-white h-100 shadow-lg"
+             style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-white-50">Clients</small>
+                    <h1>{{ clients_count }}</h1>
+                    <p class="mb-0">Total des clients</p>
+                </div>
+                <i class="bi bi-people-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Avocats -->
+    <div class="col">
+        <div class="card dashboard-card text-white h-100 shadow-lg"
+             style="background:linear-gradient(135deg,#7c3aed,#5b21b6);">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-white-50">Avocats</small>
+                    <h1>{{ lawyers_count }}</h1>
+                    <p class="mb-0">Total des avocats</p>
+                </div>
+                <i class="bi bi-person-badge-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dossiers -->
+    <div class="col">
+        <div class="card dashboard-card text-white h-100 shadow-lg"
+             style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-white-50">Dossiers</small>
+                    <h1>{{ dossiers_count }}</h1>
+                    <p class="mb-0">Total des dossiers</p>
+                </div>
+                <i class="bi bi-folder-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rendez-vous -->
+    <div class="col">
+        <div class="card dashboard-card text-white h-100 shadow-lg"
+             style="background:linear-gradient(135deg,#ef4444,#dc2626);">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-white-50">Rendez-vous</small>
+                    <h1>{{ appointments_count }}</h1>
+                    <p class="mb-0">RDV programmés</p>
+                </div>
+                <i class="bi bi-calendar-check-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documents -->
+    <div class="col">
+        <div class="card dashboard-card text-white h-100 shadow-lg"
+             style="background:linear-gradient(135deg,#0891b2,#0e7490);">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-white-50">Documents</small>
+                    <h1>{{ documents_count }}</h1>
+                    <p class="mb-0">Documents enregistrés</p>
+                </div>
+                <i class="bi bi-file-earmark-text-fill"></i>
+            </div>
+        </div>
+    </div>
+
+</div>
+    
+  </div>
+
+  <div class="row g-4 mb-4">
+
+    <!-- Graphique principal -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-lg rounded-4 h-100">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-graph-up-arrow text-primary"></i>
+                    Évolution des dossiers
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <canvas id="casesChart" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphique circulaire -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-lg rounded-4 h-100">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-pie-chart-fill text-success"></i>
+                    Répartition
+                </h5>
+            </div>
+
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <canvas id="statsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card border-0 rounded-4 shadow-lg">
+        <div
+          class="card-header border-0 rounded-top-4 text-white"
+          style="background: linear-gradient(135deg, #1e3a8a, #2563eb)"
+        >
+          <div class="d-flex justify-content-between align-items-center py-2">
+            <h4 class="mb-0">
+              <i class="bi bi-folder2-open"></i> Derniers dossiers
+            </h4>
+            <a
+              href="{% url 'dossier_list' %}"
+              class="btn btn-light btn-sm rounded-pill"
+              >Voir tout</a
+            >
+          </div>
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Référence</th>
+                <th>Client</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for dossier in recent_dossiers %}
+              <tr>
+                <td>{{ dossier.reference }}</td>
+                <td>{{ dossier.client }}</td>
+                <td>
+                  <span class="badge bg-secondary">{{ dossier.status }}</span>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3" class="text-center">
+                  Aucun dossier disponible.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card border-0 rounded-4 shadow-lg h-100">
+        <div
+          class="card-header border-0 rounded-top-4 text-white"
+          style="background: linear-gradient(135deg, #7c3aed, #4f46e5)"
+        >
+          <h4 class="mb-0 py-2">
+            <i class="bi bi-bell-fill"></i> Notifications
+          </h4>
+        </div>
+        <div class="card-body">
+          <p>
+            <i class="bi bi-person-plus-fill text-success"></i> Nouveau client
+            ajouté
+          </p>
+          <hr />
+          <p>
+            <i class="bi bi-folder-fill text-warning"></i> Nouveau dossier créé
+          </p>
+          <hr />
+          <p>
+            <i class="bi bi-calendar-event text-primary"></i> Rendez-vous
+            aujourd'hui
+          </p>
+          <hr />
+          <p>
+            <i class="bi bi-file-earmark-check-fill text-info"></i> Nouveau
+            document ajouté
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const casesChart = new Chart(document.getElementById('casesChart'), {
+    type: 'line',
+    data: {
+        labels: ['Jan','Fév','Mar','Avr','Mai','Juin'],
+        datasets: [{
+            label: 'Dossiers',
+            data: [5,8,12,10,15,20],
+            tension: .4,
+            fill: true
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{
+            legend:{
+                display:false
+            }
+        }
+    }
+});
+
+const statsChart = new Chart(document.getElementById('statsChart'), {
+    type:'doughnut',
+    data:{
+        labels:['Clients','Avocats','Documents'],
+        datasets:[{
+            data:[
+                {{ clients_count }},
+                {{ lawyers_count }},
+                {{ documents_count }}
+            ]
+        }]
+    },
+    options:{
+        responsive:true
+    }
+});
+</script>
+
+{% endblock %}
+ 

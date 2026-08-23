@@ -1,79 +1,105 @@
 {% extends 'base.html' %}
 
-{% block title %}Connexion{% endblock %}
-
 {% block content %}
 
-<div class="container mt-5">
+<div class="container-fluid">
+    <div class="row min-vh-100">
 
-    <div class="row justify-content-center">
+        <!-- Partie gauche -->
+        <div class="col-lg-6 d-flex align-items-center justify-content-center bg-primary text-white">
 
-        <div class="col-md-5">
+            <div class="text-center p-5">
 
-            <div class="card shadow">
+                <h1 class="display-3 fw-bold">
+                    JurisCabinet
+                </h1>
 
-                <div class="card-body">
+                <h3 class="mt-4">
+                    Connectez-vous à votre espace
+                </h3>
 
-                    <h2 class="text-center mb-4">
-                        JurisCabinet
-                    </h2>
+                <p class="lead mt-3">
+                    Gérez vos clients, dossiers, rendez-vous, documents,
+                    factures et messagerie depuis une seule plateforme.
+                </p>
 
-                    <p class="text-center text-muted">
-                        Connexion
-                    </p>
+                <i class="bi bi-shield-lock display-1"></i>
 
-                    {% if error %}
+            </div>
+
+        </div>
+
+        <!-- Partie droite -->
+        <div class="col-lg-6 d-flex align-items-center justify-content-center">
+
+            <div class="card shadow-lg border-0 rounded-4 p-5" style="width:450px;">
+
+                <h2 class="text-center mb-4">
+                    Connexion
+                </h2>
+
+                {% if error %}
                     <div class="alert alert-danger">
-                         {{ error }}
+                        {{ error }}
                     </div>
-                    {% endif %}
-                    
-                    <form method="POST">
+                {% endif %}
 
-                        {% csrf_token %}
+                <form method="POST">
 
-                        <div class="mb-3">
+                    {% csrf_token %}
 
-                            <label>Nom d'utilisateur</label>
+                    <div class="mb-3">
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                name="username"
-                            >
+                        <label class="form-label">
+                            Nom d'utilisateur
+                        </label>
 
-                        </div>
+                        <input
+                            type="text"
+                            name="username"
+                            class="form-control form-control-lg"
+                            required>
 
-                        <div class="mb-3">
+                    </div>
 
-                            <label>Mot de passe</label>
+                    <div class="mb-4">
 
-                            <input
-                                type="password"
-                                class="form-control"
-                                name="password"
-                            >
+                        <label class="form-label">
+                            Mot de passe
+                        </label>
 
-                        </div>
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control form-control-lg"
+                            required>
 
-                        <button
-                            class="btn btn-primary w-100"
-                            type="submit">
+                    </div>
 
-                            Se connecter
+                    <button class="btn btn-primary btn-lg w-100">
 
-                        </button>
+                        Se connecter
 
-                    </form>
+                    </button>
 
-                </div>
+
+                    <div class="text-center mt-4">
+    <p class="mb-2">
+        Vous n'avez pas encore de compte ?
+    </p>
+
+    <a href="{% url 'register' %}" class="btn btn-outline-primary">
+        Créer un compte
+    </a>
+</div>
+
+                </form>
 
             </div>
 
         </div>
 
     </div>
-
 </div>
 
 {% endblock %}

@@ -14,39 +14,39 @@
             <ul class="nav flex-column">
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#">🏠 Tableau de bord</a>
+                    <a class="nav-link text-white" href="{% url 'admin_dashboard' %}">🏠 Tableau de bord</a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#">👥 Clients</a>
+                    <a class="nav-link text-white" href="{% url 'client_list' %}">👥 Clients</a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#">⚖️ Avocats</a>
+                    <a class="nav-link text-white" href="{% url 'lawyer_list' %}">⚖️ Avocats</a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#">📁 Dossiers</a>
+                    <a class="nav-link text-white" href="{% url 'dossier_list' %}">📁 Dossiers</a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#">📅 Rendez-vous</a>
+                    <a class="nav-link text-white" href="{% url 'appointment_list' %}">📅 Rendez-vous</a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#">📄 Documents</a>
+                    <a class="nav-link text-white" href="{% url 'document_list' %}">📄 Documents</a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#">💳 Facturation</a>
+                    <a class="nav-link text-white" href="{% url 'invoice_list' %}">💳 Facturation</a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#">💬 Messagerie</a>
+                    <a class="nav-link text-white" href="{% url 'inbox' %}">💬 Messagerie</a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#">🔔 Notifications</a>
+                    <a class="nav-link text-white" href="{% url 'notification_list' %}">🔔 Notifications</a>
                 </li>
 
             </ul>

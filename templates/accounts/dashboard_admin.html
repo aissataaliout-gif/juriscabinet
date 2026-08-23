@@ -4,39 +4,121 @@
 
 {% block dashboard_content %}
 
-<h2>Bienvenue {{ request.user.username }}</h2>
+<div class="card border-0 shadow-lg rounded-4 mb-4">
+    <div class="card-body p-4">
 
-<p>Vous êtes connecté en tant qu'administrateur.</p>
+        <div class="d-flex justify-content-between align-items-center">
 
-<div class="row mt-4">
+            <div>
+                <h2 class="fw-bold mb-2">
+                    <i class="bi bi-bank2 text-primary"></i>
+                    JurisCabinet
+                </h2>
 
-    <div class="col-md-4">
-        <div class="card shadow">
-            <div class="card-body">
-                <h5>Clients</h5>
-                <h2>0</h2>
+                <p class="text-muted mb-0">
+                    Bienvenue <strong>{{ request.user.username }}</strong>,
+                    voici un aperçu de votre cabinet d'avocats.
+                </p>
             </div>
+
+            <div class="text-end">
+                <h5 class="mb-1">
+                    <i class="bi bi-calendar-event"></i>
+                    Tableau de bord
+                </h5>
+
+                <small class="text-muted">
+                    Administration
+                </small>
+            </div>
+
         </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="card shadow">
-            <div class="card-body">
-                <h5>Avocats</h5>
-                <h2>0</h2>
-            </div>
-        </div>
     </div>
+</div>
 
-    <div class="col-md-4">
-        <div class="card shadow">
-            <div class="card-body">
-                <h5>Dossiers</h5>
-                <h2>0</h2>
+<div class="row mt-5">
+
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-folder-fill text-warning"></i>
+                    Derniers dossiers
+                </h5>
             </div>
+
+            <div class="card-body">
+
+                {% if recent_dossiers %}
+
+                    <ul class="list-group list-group-flush">
+
+                        {% for dossier in recent_dossiers %}
+
+                        <li class="list-group-item d-flex justify-content-between">
+
+                            <span>{{ dossier.titre }}</span>
+
+                            <span class="badge bg-primary">
+                                #{{ dossier.id }}
+                            </span>
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% else %}
+
+                    <p class="text-muted">
+                        Aucun dossier enregistré.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
         </div>
     </div>
 
 </div>
+<div class="col-lg-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">
+                <i class="bi bi-calendar-check-fill text-info"></i>
+                Derniers rendez-vous
+            </h5>
+        </div>
+{% include 'dashboard/stat_cards.html' %}
+        <div class="card-body">
 
+            {% if recent_appointments %}
+
+                <ul class="list-group list-group-flush">
+
+                    {% for appointment in recent_appointments %}
+
+                    <li class="list-group-item">
+                        {{ appointment }}
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            {% else %}
+
+                <p class="text-muted">
+                    Aucun rendez-vous enregistré.
+                </p>
+
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+</div>
 {% endblock %}

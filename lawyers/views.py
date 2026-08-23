@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Lawyer
 from .forms import LawyerForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 def lawyer_list(request):
     lawyers = Lawyer.objects.all()
@@ -50,3 +51,12 @@ def lawyer_delete(request, pk):
     return render(request, "lawyers/lawyer_confirm_delete.html", {
         "lawyer": lawyer
     })
+@login_required
+def lawyer_dashboard(request):
+    return render(
+        request,
+        "lawyers/lawyer_dashboard.html",
+        {
+            "lawyer": request.user,
+        },
+    )
