@@ -2,104 +2,126 @@
 
 {% block content %}
 
-<div class="container-fluid">
-    <div class="row min-vh-100">
+<div class="jc-login-page">
+
+    <div class="jc-login-card">
 
         <!-- Partie gauche -->
-        <div class="col-lg-6 d-flex align-items-center justify-content-center bg-primary text-white">
+        <div class="jc-login-brand">
 
-            <div class="text-center p-5">
+            <div class="jc-login-brand-content">
 
-                <h1 class="display-3 fw-bold">
-                    JurisCabinet
-                </h1>
+                <div class="jc-login-logo">
+                    <i class="bi bi-bank"></i>
+                </div>
 
-                <h3 class="mt-4">
-                    Connectez-vous à votre espace
-                </h3>
+                <h1>JurisCabinet</h1>
 
-                <p class="lead mt-3">
-                    Gérez vos clients, dossiers, rendez-vous, documents,
-                    factures et messagerie depuis une seule plateforme.
+                <h3>Votre cabinet, votre espace.</h3>
+
+                <p>
+                    Gérez vos clients, dossiers, rendez-vous,
+                    documents, factures et messagerie depuis
+                    une seule plateforme.
                 </p>
 
-                <i class="bi bi-shield-lock display-1"></i>
+                <div class="jc-login-security">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Un espace sécurisé pour votre cabinet</span>
+                </div>
 
             </div>
 
         </div>
 
         <!-- Partie droite -->
-        <div class="col-lg-6 d-flex align-items-center justify-content-center">
+        <div class="jc-login-form">
 
-            <div class="card shadow-lg border-0 rounded-4 p-5" style="width:450px;">
+            <div class="jc-login-form-header">
 
-                <h2 class="text-center mb-4">
-                    Connexion
-                </h2>
+                <div class="jc-login-mobile-icon">
+                    <i class="bi bi-bank"></i>
+                </div>
 
-                {% if error %}
-                    <div class="alert alert-danger">
-                        {{ error }}
-                    </div>
-                {% endif %}
+                <h2>Bienvenue</h2>
 
-                <form method="POST">
+                <p>
+                    Connectez-vous à votre espace JurisCabinet
+                </p>
 
-                    {% csrf_token %}
+            </div>
 
-                    <div class="mb-3">
+            {% if error %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            {% endif %}
 
-                        <label class="form-label">
-                            Nom d'utilisateur
-                        </label>
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Nom d'utilisateur
+                    </label>
+
+                    <div class="jc-input-group">
+                        <i class="bi bi-person"></i>
 
                         <input
                             type="text"
                             name="username"
-                            class="form-control form-control-lg"
+                            class="form-control"
+                            placeholder="Votre nom d'utilisateur"
                             required>
-
                     </div>
 
-                    <div class="mb-4">
+                </div>
 
-                        <label class="form-label">
-                            Mot de passe
-                        </label>
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Mot de passe
+                    </label>
+
+                    <div class="jc-input-group">
+                        <i class="bi bi-lock"></i>
 
                         <input
                             type="password"
                             name="password"
-                            class="form-control form-control-lg"
+                            class="form-control"
+                            placeholder="Votre mot de passe"
                             required>
-
                     </div>
 
-                    <button class="btn btn-primary btn-lg w-100">
+                </div>
 
-                        Se connecter
+                <button type="submit" class="jc-login-button">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Se connecter
+                </button>
 
-                    </button>
+            </form>
 
+            <div class="jc-login-register">
 
-                    <div class="text-center mt-4">
-    <p class="mb-2">
-        Vous n'avez pas encore de compte ?
-    </p>
+                <p>
+                    Vous n'avez pas encore de compte ?
+                </p>
 
-    <a href="{% url 'register' %}" class="btn btn-outline-primary">
-        Créer un compte
-    </a>
-</div>
-
-                </form>
+                <a href="{% url 'register' %}">
+                    Créer un compte
+                </a>
 
             </div>
 
         </div>
 
     </div>
+
 </div>
 
 {% endblock %}

@@ -2,72 +2,287 @@
 
 {% block content %}
 
-<div class="container-fluid">
+<style>
+    .jc-dashboard-layout {
+        min-height: 100vh;
+    }
 
-    <div class="row">
+    /* SIDEBAR */
+    .jc-sidebar {
+        background: #172033;
+        color: white;
+        min-height: 100vh;
+        padding: 28px 20px;
+        display: flex;
+        flex-direction: column;
+    }
 
-        <div class="col-md-3 bg-dark text-white min-vh-100 p-4">
+    .jc-sidebar-brand {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 1.55rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        padding: 0 12px;
+    }
 
-            <h3>JurisCabinet</h3>
-            <hr>
+    .jc-sidebar-brand:hover {
+        color: #ffffff;
+    }
 
-            <ul class="nav flex-column">
+    .jc-sidebar-divider {
+        border-color: rgba(255,255,255,0.12);
+        margin: 20px 10px 15px;
+    }
 
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="{% url 'admin_dashboard' %}">🏠 Tableau de bord</a>
+    .jc-sidebar-section {
+        color: rgba(255,255,255,0.45);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 0 14px;
+        margin-bottom: 8px;
+    }
+
+    .jc-sidebar-nav {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        margin: 0;
+        padding: 8px 0;
+    }
+
+    .jc-sidebar .nav-item {
+        margin: 2px 0;
+    }
+
+    .jc-sidebar .nav-link {
+        color: rgba(255,255,255,0.82) !important;
+        border-radius: 12px;
+        padding: 13px 14px;
+        font-size: 0.98rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.25s ease;
+    }
+
+    .jc-sidebar .nav-link:hover {
+        background: rgba(255,255,255,0.09);
+        color: #ffffff !important;
+        transform: translateX(4px);
+    }
+
+    .jc-sidebar .nav-link.active {
+        background: linear-gradient(
+            135deg,
+            #0b3a5b,
+            #0e7490
+        );
+        color: #ffffff !important;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+    }
+
+    .jc-sidebar-bottom {
+        margin-top: 10px;
+        padding: 15px 14px 5px;
+        border-top: 1px solid rgba(255,255,255,0.10);
+        color: rgba(255,255,255,0.45);
+        font-size: 0.78rem;
+        text-align: center;
+    }
+
+    /* CONTENU */
+    .jc-dashboard-content {
+        min-height: 100vh;
+        background: #f5f7fa;
+        padding: 28px;
+    }
+
+    /* MOBILE */
+    @media (max-width: 767.98px) {
+
+        .jc-sidebar {
+            min-height: auto;
+            padding: 20px 15px;
+        }
+
+        .jc-sidebar-nav {
+            justify-content: flex-start;
+            gap: 4px;
+        }
+
+        .jc-sidebar .nav-link {
+            padding: 11px 13px;
+        }
+
+        .jc-sidebar-bottom {
+            margin-top: 15px;
+        }
+
+        .jc-dashboard-content {
+            padding: 18px;
+        }
+    }
+</style>
+
+
+<div class="container-fluid p-0">
+
+    <div class="row g-0 jc-dashboard-layout">
+
+        <!-- ========================= -->
+        <!-- SIDEBAR -->
+        <!-- ========================= -->
+
+        <aside class="col-md-3 jc-sidebar">
+
+            <a
+                href="{% if request.user.role == 'ADMIN' %}{% url 'admin_dashboard' %}{% elif request.user.role == 'LAWYER' %}{% url 'lawyer_dashboard' %}{% elif request.user.role == 'CLIENT' %}{% url 'client_dashboard' %}{% endif %}"
+                class="jc-sidebar-brand"
+            >
+                🏛️ JurisCabinet
+            </a>
+
+            <hr class="jc-sidebar-divider">
+
+            <div class="jc-sidebar-section">
+                Navigation
+            </div>
+
+            <ul class="nav flex-column jc-sidebar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% if request.user.role == 'ADMIN' %}{% url 'admin_dashboard' %}{% elif request.user.role == 'LAWYER' %}{% url 'lawyer_dashboard' %}{% elif request.user.role == 'CLIENT' %}{% url 'client_dashboard' %}{% endif %}">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Tableau de bord</span>
+                    </a>
                 </li>
 
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="{% url 'client_list' %}">👥 Clients</a>
+                {% if request.user.role == "ADMIN" or request.user.role == "LAWYER" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'client_list' %}">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Clients</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% if request.user.role == "ADMIN" or request.user.role == "LAWYER" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lawyer_list' %}">
+                        <i class="bi bi-briefcase-fill"></i>
+                        <span>Avocats</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dossier_list' %}">
+                        <i class="bi bi-folder2-open"></i>
+                        <span>Dossiers</span>
+                    </a>
                 </li>
 
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="{% url 'lawyer_list' %}">⚖️ Avocats</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appointment_list' %}">
+                        <i class="bi bi-calendar-event"></i>
+                        <span>Rendez-vous</span>
+                    </a>
                 </li>
 
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="{% url 'dossier_list' %}">📁 Dossiers</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'document_list' %}">
+                        <i class="bi bi-file-earmark-text"></i>
+                        <span>Documents</span>
+                    </a>
                 </li>
 
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="{% url 'appointment_list' %}">📅 Rendez-vous</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'invoice_list' %}">
+                        <i class="bi bi-credit-card"></i>
+                        <span>Facturation</span>
+                    </a>
                 </li>
 
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="{% url 'document_list' %}">📄 Documents</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'inbox' %}">
+                        <i class="bi bi-chat-dots-fill"></i>
+                        <span>Messagerie</span>
+                    </a>
                 </li>
 
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="{% url 'invoice_list' %}">💳 Facturation</a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="{% url 'inbox' %}">💬 Messagerie</a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="{% url 'notification_list' %}">🔔 Notifications</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'notification_list' %}">
+                        <i class="bi bi-bell-fill"></i>
+                        <span>Notifications</span>
+                    </a>
                 </li>
 
             </ul>
 
-        </div>
+            <div class="jc-sidebar-bottom">
+                JurisCabinet · Espace sécurisé
+            </div>
 
-        <div class="col-md-9 p-4">
+        </aside>
+
+
+        <!-- ========================= -->
+        <!-- CONTENU PRINCIPAL -->
+        <!-- ========================= -->
+
+        <main class="col-md-9 jc-dashboard-content">
+
+            <div class="d-flex justify-content-end align-items-center mb-4">
+                <a href="{% url 'profile' %}" class="d-flex align-items-center text-decoration-none">
+                    {% if request.user.profile_picture %}
+                        <img src="{{ request.user.profile_picture.url }}"
+                             style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                        <div style="width: 38px; height: 38px; border-radius: 50%; background: #0B3A5B;
+                                    color: white; display: flex; align-items: center; justify-content: center;
+                                    font-weight: 700;">
+                            {{ request.user.username|first|upper }}
+                        </div>
+                    {% endif %}
+                    <div class="ms-2 text-dark">
+                        <div style="font-size: 0.9rem; font-weight: 600;">{{ request.user.username }}</div>
+                        <div style="font-size: 0.75rem; color: #8b93a7;">{{ request.user.get_role_display }}</div>
+                    </div>
+                </a>
+            </div>
 
             {% block dashboard_content %}
             {% endblock %}
+
             {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
 
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-{% endif %}
+                {% for message in messages %}
 
-        </div>
+                    <div
+                        class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                        role="alert"
+                    >
+
+                        {{ message }}
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                        ></button>
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        </main>
 
     </div>
 

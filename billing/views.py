@@ -30,23 +30,41 @@ def invoice_list(request):
 
     elif request.user.role == "CLIENT":
         client = request.user.client_profile
-
         invoices = Invoice.objects.filter(
             dossier__client=client
         ).order_by("-created_at")
 
     elif request.user.role == "LAWYER":
-        # On conservera la gestion actuelle de l'avocat
-        # jusqu'à vérification de son lien User ↔ Lawyer.
         invoices = Invoice.objects.all().order_by("-created_at")
 
     else:
         return HttpResponseForbidden("Accès refusé.")
 
+    all_invoices = invoices
+    counts = {
+        "TOUTES": all_invoices.count(),
+        "PAID": all_invoices.filter(status="PAID").count(),
+        "PENDING": all_invoices.filter(status="PENDING").count(),
+        "OVERDUE": all_invoices.filter(status="OVERDUE").count(),
+    }
+
+    status = request.GET.get("status", "")
+    if status in ["PAID", "PENDING"]:
+        invoices = invoices.filter(status=status)
+
+    q = request.GET.get("q", "").strip()
+    if q:
+        invoices = invoices.filter(dossier__title__icontains=q)
+
     return render(
         request,
         "billing/invoice_list.html",
-        {"invoices": invoices},
+        {
+            "invoices": invoices,
+            "counts": counts,
+            "current_status": status,
+            "q": q,
+        },
     )
 
 @login_required

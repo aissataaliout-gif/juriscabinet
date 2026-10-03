@@ -6,4 +6,5 @@ urlpatterns = [
     path("nouveau/", views.appointment_create, name="appointment_create"),
     path("<int:pk>/modifier/", views.appointment_update, name="appointment_update"),
     path("<int:pk>/supprimer/", views.appointment_delete, name="appointment_delete"),
+    path("calendrier/", views.appointment_calendar, name="appointment_calendar"),
 ]

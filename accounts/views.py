@@ -9,7 +9,9 @@ from documents.models import Document
 from django.db.models.functions import TruncMonth
 from django.db.models import Count
 from .forms import ClientSignUpForm
-
+from django.contrib.auth.decorators import login_required
+from .models import ContactMessage
+from django.core.mail import send_mail
 
 def home(request):
     return render(request, "home/home.html")
@@ -58,13 +60,17 @@ def login_view(request):
         "accounts/login.html"
     )
 
-from django.contrib.auth.decorators import login_required
-
 @login_required
 def admin_dashboard(request):
+    if request.user.role != "ADMIN":
+        return redirect("home")
+    
     clients_count = Client.objects.count()
     lawyers_count = Lawyer.objects.count()
     dossiers_count = Dossier.objects.count()
+    dossiers_encours = Dossier.objects.filter(status="EN_COURS").count()
+    dossiers_attente = Dossier.objects.filter(status="OUVERT").count()
+    dossiers_clotures = Dossier.objects.filter(status="FERME").count()
     appointments_count = Appointment.objects.count()
     documents_count = Document.objects.count()
 
@@ -97,6 +103,9 @@ def admin_dashboard(request):
         "recent_appointments": recent_appointments,
         "chart_labels": labels,
         "chart_values": values,
+        "dossiers_encours": dossiers_encours,
+        "dossiers_attente": dossiers_attente,
+        "dossiers_clotures": dossiers_clotures,
     }
 
 
@@ -123,3 +132,61 @@ def register_view(request):
             "form": form
         }
     )
+@login_required
+def profile_view(request):
+
+    if request.method == "POST":
+        if request.FILES.get("profile_picture"):
+            request.user.profile_picture = request.FILES["profile_picture"]
+
+        request.user.phone = request.POST.get("phone", request.user.phone)
+        request.user.save()
+
+        messages.success(request, "Profil mis à jour.")
+        return redirect("profile")
+
+    return render(request, "accounts/profile.html")
+
+def contact_submit(request):
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        message_text = request.POST.get("message", "").strip()
+
+        if name and email and message_text:
+            ContactMessage.objects.create(
+                name=name,
+                email=email,
+                phone=phone,
+                message=message_text,
+            )
+            try:
+                send_mail(
+                    subject="Nous avons bien reçu votre message",
+                    message=(
+                        f"Bonjour {name},\n\n"
+                        "Merci de nous avoir contactés. Votre message a bien "
+                        "été reçu par notre cabinet, et un membre de notre "
+                        "équipe reviendra vers vous dans les plus brefs délais.\n\n"
+                        "Cordialement,\n"
+                        "L'équipe JurisCabinet"
+                    ),
+                    from_email=None,
+                    recipient_list=[email],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
+
+            messages.success(
+                request,
+                "Votre message a bien été envoyé. Nous vous répondrons rapidement."
+            )
+        else:
+            messages.error(
+                request,
+                "Merci de remplir tous les champs."
+            )
+
+    return redirect("home")

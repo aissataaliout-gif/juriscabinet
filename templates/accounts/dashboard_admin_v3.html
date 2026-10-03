@@ -1,317 +1,1037 @@
-{% extends 'layouts/dashboard.html' %} 
-{% block title %}Dashboard Premium{%endblock %} 
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Dashboard Admin | JurisCabinet{% endblock %}
+
 {% block dashboard_content %}
 
+<div class="container-fluid py-4">
+
+    <!-- =========================
+         HEADER ADMIN
+    ========================== -->
+    <div class="admin-hero mb-4">
+
+        <div>
+            <div class="admin-label">
+                <i class="bi bi-shield-check"></i>
+                ESPACE ADMINISTRATEUR
+            </div>
+
+            <h1 class="admin-title">
+                Bonjour, Administrateur 
+            </h1>
+
+            <p class="admin-subtitle mb-0">
+                Gérez et supervisez l'ensemble des activités de JurisCabinet.
+            </p>
+        </div>
+
+        <div class="admin-profile">
+            <div class="admin-profile-icon">
+                <i class="bi bi-person-fill"></i>
+            </div>
+
+            <div>
+                <strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong>
+                <small>Administrateur</small>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         STATISTIQUES
+    ========================== -->
+    <div class="row g-4 mb-4">
+
+        <!-- Clients -->
+        <div class="col-md-6 col-xl">
+            <div class="admin-stat-card">
+
+                <div class="stat-icon stat-blue">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <div>
+                    <span>Clients</span>
+                    <h2>{{ clients_count }}</h2>
+                    <small>Total des clients</small>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Avocats -->
+        <div class="col-md-6 col-xl">
+            <div class="admin-stat-card">
+
+                <div class="stat-icon stat-purple">
+                    <i class="bi bi-person-badge-fill"></i>
+                </div>
+
+                <div>
+                    <span>Avocats</span>
+                    <h2>{{ lawyers_count }}</h2>
+                    <small>Total des avocats</small>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Dossiers -->
+        <div class="col-md-6 col-xl">
+            <div class="admin-stat-card">
+
+                <div class="stat-icon stat-orange">
+                    <i class="bi bi-folder-fill"></i>
+                </div>
+
+                <div>
+                    <span>Dossiers</span>
+                    <h2>{{ dossiers_count }}</h2>
+                    <small>Total des dossiers</small>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Rendez-vous -->
+        <div class="col-md-6 col-xl">
+            <div class="admin-stat-card">
+
+                <div class="stat-icon stat-red">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+
+                <div>
+                    <span>Rendez-vous</span>
+                    <h2>{{ appointments_count }}</h2>
+                    <small>RDV programmés</small>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Documents -->
+        <div class="col-md-6 col-xl">
+            <div class="admin-stat-card">
+
+                <div class="stat-icon stat-green">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                </div>
+
+                <div>
+                    <span>Documents</span>
+                    <h2>{{ documents_count }}</h2>
+                    <small>Documents enregistrés</small>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         GRAPHIQUES
+    ========================== -->
+    <div class="row g-4 mb-4">
+
+        <!-- Evolution dossiers -->
+        <div class="col-lg-8">
+
+            <div class="admin-card h-100">
+
+                <div class="admin-card-header">
+
+                    <div>
+                        <span class="section-label">
+                            ANALYSE
+                        </span>
+
+                        <h4>
+                            Évolution des dossiers
+                        </h4>
+                    </div>
+
+                    <div class="section-icon blue">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+
+                </div>
+
+                <div class="admin-chart">
+                    <canvas id="casesChart"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Répartition -->
+        <div class="col-lg-4">
+
+            <div class="admin-card h-100">
+
+                <div class="admin-card-header">
+
+                    <div>
+                        <span class="section-label">
+                            STATISTIQUES
+                        </span>
+
+                        <h4>
+                            Répartition
+                        </h4>
+                    </div>
+
+                    <div class="section-icon green">
+                        <i class="bi bi-pie-chart-fill"></i>
+                    </div>
+
+                </div>
+
+                <div class="admin-chart-doughnut" style="position: relative;">
+                    <canvas id="statsChart"></canvas>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+                        <div style="font-size: 1.6rem; font-weight: 700;">{{ dossiers_count }}</div>
+                        <div style="font-size: 0.8rem; color: #8b93a7;">dossiers</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         DOSSIERS + NOTIFICATIONS
+    ========================== -->
+    <div class="row g-4">
+
+        <!-- Derniers dossiers -->
+        <div class="col-lg-8">
+
+            <div class="admin-card h-100">
+
+                <div class="admin-card-header">
+
+                    <div>
+                        <span class="section-label">
+                            ACTIVITÉ
+                        </span>
+
+                        <h4>
+                            Derniers dossiers
+                        </h4>
+                    </div>
+
+                    <a
+                        href="{% url 'dossier_list' %}"
+                        class="admin-link"
+                    >
+                        Voir tout
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table admin-table align-middle mb-0">
+
+                        <thead>
+                            <tr>
+                                <th>Référence</th>
+                                <th>Client</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for dossier in recent_dossiers %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        {{ dossier.reference }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ dossier.client }}
+                                </td>
+
+                                <td>
+                                    <span class="status-badge">
+                                        {{ dossier.status }}
+                                    </span>
+                                </td>
+
+                            </tr>
+
+                            {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="3"
+                                    class="text-center py-5 text-muted"
+                                >
+                                    <i class="bi bi-folder2-open fs-2 d-block mb-2"></i>
+                                    Aucun dossier disponible.
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Notifications -->
+        <div class="col-lg-4">
+
+            <div class="admin-card h-100">
+
+                <div class="admin-card-header">
+
+                    <div>
+                        <span class="section-label">
+                            ACTIVITÉ RÉCENTE
+                        </span>
+
+                        <h4>
+                            Notifications
+                        </h4>
+                    </div>
+
+                    <div class="section-icon purple">
+                        <i class="bi bi-bell-fill"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="notification-list">
+
+                    <div class="notification-item">
+
+                        <div class="notification-icon green">
+                            <i class="bi bi-person-plus-fill"></i>
+                        </div>
+
+                        <div>
+                            <strong>Nouveau client</strong>
+                            <p>Un nouveau client a été ajouté.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="notification-item">
+
+                        <div class="notification-icon orange">
+                            <i class="bi bi-folder-fill"></i>
+                        </div>
+
+                        <div>
+                            <strong>Nouveau dossier</strong>
+                            <p>Un nouveau dossier a été créé.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="notification-item">
+
+                        <div class="notification-icon blue">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+
+                        <div>
+                            <strong>Rendez-vous</strong>
+                            <p>Un rendez-vous est prévu aujourd'hui.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="notification-item">
+
+                        <div class="notification-icon purple">
+                            <i class="bi bi-file-earmark-check-fill"></i>
+                        </div>
+
+                        <div>
+                            <strong>Nouveau document</strong>
+                            <p>Un document a été ajouté.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     STYLE ADMIN
+========================== -->
 <style>
-  .dashboard-card{
-    border:none;
-    border-radius:22px;
-    overflow:hidden;
-    transition:all .35s ease;
-    cursor:pointer;
-    position:relative;
+
+.admin-hero {
+    background: linear-gradient(
+        135deg,
+        var(--jc-primary),
+        var(--jc-primary-dark)
+    );
+
+    color: white;
+
+    border-radius: 24px;
+
+    padding: 32px 36px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 24px;
+
+    box-shadow: var(--jc-shadow);
 }
 
-.dashboard-card::before{
-    content:"";
-    position:absolute;
-    top:-60%;
-    right:-30%;
-    width:180px;
-    height:180px;
-    background:rgba(255,255,255,.12);
-    border-radius:50%;
+
+.admin-label {
+    font-size: .78rem;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    opacity: .8;
+
+    margin-bottom: 10px;
 }
 
-.dashboard-card:hover{
-    transform:translateY(-10px) scale(1.03);
-    box-shadow:0 20px 45px rgba(0,0,0,.22)!important;
+
+.admin-title {
+    font-size: 2rem;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
 }
 
-.dashboard-card .card-body{
-    padding:25px;
+
+.admin-subtitle {
+    font-size: 1rem;
+
+    opacity: .85;
 }
 
-.dashboard-card small{
-    font-size:.95rem;
-    letter-spacing:.5px;
+
+.admin-profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    background: rgba(255,255,255,.12);
+
+    padding: 12px 18px;
+
+    border-radius: 16px;
+
+    min-width: 190px;
 }
 
-.dashboard-card h1{
-    font-size:3rem;
-    font-weight:800;
-    margin:10px 0;
+
+.admin-profile strong {
+    display: block;
+
+    font-size: .95rem;
 }
 
-.dashboard-card p{
-    font-size:1rem;
-    margin-bottom:0;
+
+.admin-profile small {
+    opacity: .75;
 }
 
-.dashboard-card i{
-    font-size:4rem;
-    opacity:.85;
+
+.admin-profile-icon {
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(255,255,255,.16);
+
+    font-size: 1.2rem;
 }
+
+
+/* STATISTIQUES */
+
+.admin-stat-card {
+    background: var(--jc-surface);
+
+    border: 1px solid var(--jc-border);
+
+    border-radius: var(--jc-radius);
+
+    padding: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    height: 100%;
+
+    box-shadow: var(--jc-shadow);
+
+    transition: .25s ease;
+}
+
+
+.admin-stat-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow: var(--jc-shadow-hover);
+}
+
+
+.admin-stat-card span {
+    color: var(--jc-text-secondary);
+
+    font-size: .85rem;
+
+    font-weight: 600;
+}
+
+
+.admin-stat-card h2 {
+    margin: 4px 0;
+
+    font-size: 1.8rem;
+
+    font-weight: 800;
+
+    color: var(--jc-text);
+}
+
+
+.admin-stat-card small {
+    color: var(--jc-text-secondary);
+
+    font-size: .78rem;
+}
+
+
+.stat-icon {
+    width: 52px;
+
+    height: 52px;
+
+    min-width: 52px;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 1.35rem;
+}
+
+
+.stat-blue {
+    background: rgba(11,58,91,.10);
+
+    color: var(--jc-primary);
+}
+
+
+.stat-purple {
+    background: rgba(124,58,237,.10);
+
+    color: #7c3aed;
+}
+
+
+.stat-orange {
+    background: rgba(245,158,11,.12);
+
+    color: #d97706;
+}
+
+
+.stat-red {
+    background: rgba(220,53,69,.10);
+
+    color: #dc3545;
+}
+
+
+.stat-green {
+    background: rgba(25,135,84,.10);
+
+    color: #198754;
+}
+
+
+/* CARTES */
+
+.admin-card {
+    background: var(--jc-surface);
+
+    border: 1px solid var(--jc-border);
+
+    border-radius: var(--jc-radius);
+
+    box-shadow: var(--jc-shadow);
+
+    overflow: hidden;
+}
+
+
+.admin-card-header {
+    padding: 22px 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.admin-card-header h4 {
+    margin: 4px 0 0;
+
+    font-size: 1.15rem;
+
+    font-weight: 750;
+
+    color: var(--jc-text);
+}
+
+
+.section-label {
+    font-size: .68rem;
+
+    font-weight: 700;
+
+    letter-spacing: 1.3px;
+
+    color: var(--jc-text-secondary);
+}
+
+
+.section-icon {
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.section-icon.blue {
+    background: rgba(11,58,91,.10);
+
+    color: var(--jc-primary);
+}
+
+
+.section-icon.green {
+    background: rgba(25,135,84,.10);
+
+    color: #198754;
+}
+
+
+.section-icon.purple {
+    background: rgba(124,58,237,.10);
+
+    color: #7c3aed;
+}
+
+
+/* GRAPHIQUES */
+
+.admin-chart {
+    padding: 10px 24px 24px;
+
+    height: 310px;
+}
+
+
+.admin-chart-doughnut {
+    height: 300px;
+
+    padding: 10px 30px 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* TABLE */
+
+.admin-table {
+    border-top: 1px solid var(--jc-border);
+}
+
+
+.admin-table thead th {
+    color: var(--jc-text-secondary);
+
+    font-size: .78rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+
+    border-bottom: 1px solid var(--jc-border);
+
+    padding: 14px 24px;
+}
+
+
+.admin-table tbody td {
+    padding: 16px 24px;
+
+    color: var(--jc-text);
+
+    border-color: var(--jc-border);
+}
+
+
+.admin-table tbody tr {
+    transition: .2s ease;
+}
+
+
+.admin-table tbody tr:hover {
+    background: rgba(11,58,91,.025);
+}
+
+
+.status-badge {
+    display: inline-block;
+
+    padding: 6px 11px;
+
+    border-radius: 999px;
+
+    background: rgba(11,58,91,.08);
+
+    color: var(--jc-primary);
+
+    font-size: .75rem;
+
+    font-weight: 700;
+}
+
+
+/* LIEN */
+
+.admin-link {
+    text-decoration: none;
+
+    color: var(--jc-primary);
+
+    font-size: .85rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.admin-link:hover {
+    color: var(--jc-primary-dark);
+}
+
+
+/* NOTIFICATIONS */
+
+.notification-list {
+    padding: 0 24px 18px;
+}
+
+
+.notification-item {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid var(--jc-border);
+}
+
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+
+.notification-item strong {
+    font-size: .88rem;
+
+    color: var(--jc-text);
+}
+
+
+.notification-item p {
+    margin: 3px 0 0;
+
+    color: var(--jc-text-secondary);
+
+    font-size: .78rem;
+}
+
+
+.notification-icon {
+    width: 38px;
+
+    height: 38px;
+
+    min-width: 38px;
+
+    border-radius: 11px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.notification-icon.green {
+    background: rgba(25,135,84,.10);
+
+    color: #198754;
+}
+
+
+.notification-icon.orange {
+    background: rgba(245,158,11,.12);
+
+    color: #d97706;
+}
+
+
+.notification-icon.blue {
+    background: rgba(11,58,91,.10);
+
+    color: var(--jc-primary);
+}
+
+
+.notification-icon.purple {
+    background: rgba(124,58,237,.10);
+
+    color: #7c3aed;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .admin-hero {
+        padding: 25px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .admin-title {
+        font-size: 1.6rem;
+    }
+
+    .admin-profile {
+        width: 100%;
+    }
+
+}
+
 </style>
 
-<div class="container-fluid py-4">
-  <div class="bg-primary bg-gradient text-white rounded-4 p-5 mb-5 shadow-lg">
-    <div class="d-flex justify-content-between align-items-center flex-wrap">
-      <div>
-        <h2 class="fw-bold mb-2">
-          <i class="bi bi-stars"></i> Dashboard Premium
-        </h2>
-        <p class="mb-0 fs-5">
-          Bienvenue dans <strong>JurisCabinet</strong>. Gérez votre cabinet avec
-          élégance, rapidité et sécurité.
-        </p>
-      </div>
-      <i class="bi bi-shield-check display-1 opacity-75"></i>
-    </div>
-  </div>
 
-  <div class="row g-4 mb-5">
-    
-   <div class="row row-cols-1 row-cols-md-2 row-cols-xl-5 g-4 mb-5">
-
-    <!-- Clients -->
-    <div class="col">
-        <div class="card dashboard-card text-white h-100 shadow-lg"
-             style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <small class="text-white-50">Clients</small>
-                    <h1>{{ clients_count }}</h1>
-                    <p class="mb-0">Total des clients</p>
-                </div>
-                <i class="bi bi-people-fill"></i>
-            </div>
-        </div>
-    </div>
-
-    <!-- Avocats -->
-    <div class="col">
-        <div class="card dashboard-card text-white h-100 shadow-lg"
-             style="background:linear-gradient(135deg,#7c3aed,#5b21b6);">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <small class="text-white-50">Avocats</small>
-                    <h1>{{ lawyers_count }}</h1>
-                    <p class="mb-0">Total des avocats</p>
-                </div>
-                <i class="bi bi-person-badge-fill"></i>
-            </div>
-        </div>
-    </div>
-
-    <!-- Dossiers -->
-    <div class="col">
-        <div class="card dashboard-card text-white h-100 shadow-lg"
-             style="background:linear-gradient(135deg,#f59e0b,#d97706);">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <small class="text-white-50">Dossiers</small>
-                    <h1>{{ dossiers_count }}</h1>
-                    <p class="mb-0">Total des dossiers</p>
-                </div>
-                <i class="bi bi-folder-fill"></i>
-            </div>
-        </div>
-    </div>
-
-    <!-- Rendez-vous -->
-    <div class="col">
-        <div class="card dashboard-card text-white h-100 shadow-lg"
-             style="background:linear-gradient(135deg,#ef4444,#dc2626);">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <small class="text-white-50">Rendez-vous</small>
-                    <h1>{{ appointments_count }}</h1>
-                    <p class="mb-0">RDV programmés</p>
-                </div>
-                <i class="bi bi-calendar-check-fill"></i>
-            </div>
-        </div>
-    </div>
-
-    <!-- Documents -->
-    <div class="col">
-        <div class="card dashboard-card text-white h-100 shadow-lg"
-             style="background:linear-gradient(135deg,#0891b2,#0e7490);">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <small class="text-white-50">Documents</small>
-                    <h1>{{ documents_count }}</h1>
-                    <p class="mb-0">Documents enregistrés</p>
-                </div>
-                <i class="bi bi-file-earmark-text-fill"></i>
-            </div>
-        </div>
-    </div>
-
-</div>
-    
-  </div>
-
-  <div class="row g-4 mb-4">
-
-    <!-- Graphique principal -->
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-lg rounded-4 h-100">
-            <div class="card-header bg-white border-0 py-3">
-                <h5 class="fw-bold mb-0">
-                    <i class="bi bi-graph-up-arrow text-primary"></i>
-                    Évolution des dossiers
-                </h5>
-            </div>
-
-            <div class="card-body">
-                <canvas id="casesChart" height="120"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- Graphique circulaire -->
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-lg rounded-4 h-100">
-            <div class="card-header bg-white border-0 py-3">
-                <h5 class="fw-bold mb-0">
-                    <i class="bi bi-pie-chart-fill text-success"></i>
-                    Répartition
-                </h5>
-            </div>
-
-            <div class="card-body d-flex align-items-center justify-content-center">
-                <canvas id="statsChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-  <div class="row g-4">
-    <div class="col-lg-8">
-      <div class="card border-0 rounded-4 shadow-lg">
-        <div
-          class="card-header border-0 rounded-top-4 text-white"
-          style="background: linear-gradient(135deg, #1e3a8a, #2563eb)"
-        >
-          <div class="d-flex justify-content-between align-items-center py-2">
-            <h4 class="mb-0">
-              <i class="bi bi-folder2-open"></i> Derniers dossiers
-            </h4>
-            <a
-              href="{% url 'dossier_list' %}"
-              class="btn btn-light btn-sm rounded-pill"
-              >Voir tout</a
-            >
-          </div>
-        </div>
-        <div class="card-body table-responsive">
-          <table class="table table-hover align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>Référence</th>
-                <th>Client</th>
-                <th>Statut</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for dossier in recent_dossiers %}
-              <tr>
-                <td>{{ dossier.reference }}</td>
-                <td>{{ dossier.client }}</td>
-                <td>
-                  <span class="badge bg-secondary">{{ dossier.status }}</span>
-                </td>
-              </tr>
-              {% empty %}
-              <tr>
-                <td colspan="3" class="text-center">
-                  Aucun dossier disponible.
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4">
-      <div class="card border-0 rounded-4 shadow-lg h-100">
-        <div
-          class="card-header border-0 rounded-top-4 text-white"
-          style="background: linear-gradient(135deg, #7c3aed, #4f46e5)"
-        >
-          <h4 class="mb-0 py-2">
-            <i class="bi bi-bell-fill"></i> Notifications
-          </h4>
-        </div>
-        <div class="card-body">
-          <p>
-            <i class="bi bi-person-plus-fill text-success"></i> Nouveau client
-            ajouté
-          </p>
-          <hr />
-          <p>
-            <i class="bi bi-folder-fill text-warning"></i> Nouveau dossier créé
-          </p>
-          <hr />
-          <p>
-            <i class="bi bi-calendar-event text-primary"></i> Rendez-vous
-            aujourd'hui
-          </p>
-          <hr />
-          <p>
-            <i class="bi bi-file-earmark-check-fill text-info"></i> Nouveau
-            document ajouté
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+<!-- =========================
+     CHARTS
+========================== -->
 <script>
-const casesChart = new Chart(document.getElementById('casesChart'), {
-    type: 'line',
-    data: {
-        labels: ['Jan','Fév','Mar','Avr','Mai','Juin'],
-        datasets: [{
-            label: 'Dossiers',
-            data: [5,8,12,10,15,20],
-            tension: .4,
-            fill: true
-        }]
-    },
-    options:{
-        responsive:true,
-        plugins:{
-            legend:{
-                display:false
+
+const casesChartElement =
+    document.getElementById('casesChart');
+
+if (casesChartElement) {
+
+    new Chart(casesChartElement, {
+
+        type: 'line',
+
+        data: {
+            labels: {{ chart_labels|safe }},
+
+            datasets: [{
+                label: 'Dossiers',
+
+                data: {{ chart_values|safe }},
+
+                tension: 0.4,
+
+                fill: true
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero: true,
+
+                    ticks: {
+                        precision: 0
+                    }
+                }
             }
         }
-    }
-});
 
-const statsChart = new Chart(document.getElementById('statsChart'), {
-    type:'doughnut',
-    data:{
-        labels:['Clients','Avocats','Documents'],
-        datasets:[{
-            data:[
-                {{ clients_count }},
-                {{ lawyers_count }},
-                {{ documents_count }}
-            ]
-        }]
-    },
-    options:{
-        responsive:true
-    }
-});
+    });
+
+}
+
+
+const statsChartElement =
+    document.getElementById('statsChart');
+
+if (statsChartElement) {
+
+    new Chart(statsChartElement, {
+
+        type: 'doughnut',
+
+        data: {
+
+            labels: [
+                'En cours',
+                'En attente',
+                'Clôturé'
+            ],
+
+            datasets: [{
+
+                data: [
+                    {{ dossiers_encours }},
+                    {{ dossiers_attente }},
+                    {{ dossiers_clotures }}
+                ],
+
+                backgroundColor: [
+                    '#0B3A5B',
+                    '#F59E0B',
+                    '#687280'
+                ]
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            cutout: '68%',
+
+            plugins: {
+
+                legend: {
+                    position: 'bottom'
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
 </script>
 
 {% endblock %}
- 

@@ -1,103 +1,105 @@
 {% extends "layouts/dashboard.html" %}
 
-{% block content %}
+{% block title %}Facturation{% endblock %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+{% block dashboard_content %}
 
+<div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Liste des factures</h2>
 
     {% if request.user.role == "ADMIN" or request.user.role == "LAWYER" %}
-        <a href="{% url 'invoice_create' %}" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i>
-            Nouvelle facture
-        </a>
+    <a href="{% url 'invoice_create' %}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Nouvelle facture
+    </a>
     {% endif %}
-
 </div>
 
+<ul class="nav nav-pills mb-3">
+    <li class="nav-item">
+        <a class="nav-link {% if not current_status %}active{% endif %}"
+           href="?{% if q %}q={{ q }}{% endif %}">
+            Toutes ({{ counts.TOUTES }})
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if current_status == 'PAID' %}active{% endif %}"
+           href="?status=PAID{% if q %}&q={{ q }}{% endif %}">
+            Payées ({{ counts.PAID }})
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if current_status == 'PENDING' %}active{% endif %}"
+           href="?status=PENDING{% if q %}&q={{ q }}{% endif %}">
+            En attente ({{ counts.PENDING }})
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if current_status == 'OVERDUE' %}active{% endif %}"
+           href="?status=OVERDUE{% if q %}&q={{ q }}{% endif %}">
+            Impayées ({{ counts.OVERDUE }})
+        </a>
+    </li>
+</ul>
+
+<form method="get" class="mb-3">
+    {% if current_status %}
+        <input type="hidden" name="status" value="{{ current_status }}">
+    {% endif %}
+    <div class="input-group" style="max-width: 400px;">
+        <input type="text" name="q" class="form-control"
+               placeholder="Rechercher par dossier..." value="{{ q }}">
+        <button class="btn btn-outline-primary" type="submit">🔍</button>
+    </div>
+</form>
 
 {% if invoices %}
-
-<table class="table table-bordered">
-
-    <thead>
-        <tr>
-            <th>Dossier</th>
-            <th>Montant</th>
-            <th>Statut</th>
-            <th>Date</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        {% for invoice in invoices %}
-
-        <tr>
-
-            <td>{{ invoice.dossier }}</td>
-
-            <td>
-                {{ invoice.amount }} FCFA
-            </td>
-
-            <td>
-                {{ invoice.get_status_display }}
-            </td>
-
-            <td>
-                {{ invoice.created_at|date:"d/m/Y" }}
-            </td>
-
-            <td>
-
-                <!-- PDF : accessible au client, avocat et administrateur -->
-                <a
-                    href="{% url 'invoice_pdf' invoice.id %}"
-                    class="btn btn-primary btn-sm"
-                >
-                    📄 PDF
-                </a>
-
-
-                <!-- Modification : ADMIN et AVOCAT uniquement -->
-                {% if request.user.role == "ADMIN" or request.user.role == "LAWYER" %}
-
-                    <a
-                        href="{% url 'invoice_update' invoice.id %}"
-                        class="btn btn-warning btn-sm"
-                    >
-                        ✏️ Modifier
+<div class="jc-table-card">
+    <table class="jc-table">
+        <thead>
+            <tr>
+                <th>N° Facture</th>
+                <th>Dossier</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+            <tr>
+                <td><span class="jc-ref">FAC-{{ invoice.id }}</span></td>
+                <td>{{ invoice.dossier }}</td>
+                <td>{{ invoice.amount }} FCFA</td>
+                <td>
+                    <span class="badge
+                        {% if invoice.status == 'PAID' %}bg-success
+                        {% elif invoice.status == 'PENDING' %}bg-warning text-dark
+                        {% else %}bg-danger{% endif %}">
+                        {{ invoice.get_status_display }}
+                    </span>
+                </td>
+                <td>{{ invoice.created_at|date:"d/m/Y" }}</td>
+                <td>
+                    <a href="{% url 'invoice_pdf' invoice.id %}" class="jc-action-btn" title="PDF">
+                        <i class="bi bi-file-pdf"></i>
                     </a>
-
-
-                    <!-- Suppression : ADMIN et AVOCAT uniquement -->
-                    <a
-                        href="{% url 'invoice_delete' invoice.id %}"
-                        class="btn btn-danger btn-sm"
-                    >
-                        🗑️ Supprimer
+                    {% if request.user.role == "ADMIN" or request.user.role == "LAWYER" %}
+                    <a href="{% url 'invoice_update' invoice.id %}" class="jc-action-btn" title="Modifier">
+                        <i class="bi bi-pencil"></i>
                     </a>
-
-                {% endif %}
-
-            </td>
-
-        </tr>
-
-        {% endfor %}
-
-    </tbody>
-
-</table>
-
-{% else %}
-
-<div class="alert alert-info">
-    Aucune facture disponible.
+                    <a href="{% url 'invoice_delete' invoice.id %}" class="jc-action-btn danger" title="Supprimer">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
-
+{% else %}
+<div class="alert alert-info">Aucune facture trouvée.</div>
 {% endif %}
 
 {% endblock %}

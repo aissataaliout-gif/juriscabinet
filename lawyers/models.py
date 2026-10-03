@@ -1,7 +1,16 @@
 from django.db import models
+from django.conf import settings
 
 
 class Lawyer(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="lawyer_profile",
+        null=True,
+        blank=True,
+    )
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     specialization = models.CharField(max_length=150)

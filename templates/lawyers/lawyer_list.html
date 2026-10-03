@@ -1,57 +1,55 @@
 {% extends "layouts/dashboard.html" %}
 
-{% block content %}
+{% block title %}Avocats{% endblock %}
 
-<div class="container mt-4">
+{% block dashboard_content %}
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Liste des avocats</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Liste des avocats</h2>
+    <a href="{% url 'lawyer_create' %}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Nouvel avocat
+    </a>
+</div>
 
-        <a href="{% url 'lawyer_create' %}" class="btn btn-success">
-        ➕ Nouvel avocat
-        </a>
-    </div>
-
-    <table class="table table-bordered table-hover">
+<div class="jc-table-card">
+    <table class="jc-table">
         <thead>
             <tr>
                 <th>Nom</th>
-    <th>Prénom</th>
-    <th>Spécialité</th>
-    <th>Téléphone</th>
-    <th>Email</th>
-    <th>Actions</th>
+                <th>Prénom</th>
+                <th>Spécialité</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Actions</th>
             </tr>
         </thead>
 
         <tbody>
             {% for lawyer in lawyers %}
             <tr>
-                <td>{{ lawyer.last_name }}</td>
-    <td>{{ lawyer.first_name }}</td>
-    <td>{{ lawyer.specialization }}</td>
-    <td>{{ lawyer.phone }}</td>
-    <td>{{ lawyer.email }}</td>
-    <td>
-        <a href="{% url 'lawyer_update' lawyer.id %}" class="btn btn-warning btn-sm">
-        ✏️ Modifier
-    </a>
-
-    <a href="{% url 'lawyer_delete' lawyer.id %}" class="btn btn-danger btn-sm">
-        🗑️ Supprimer
-    </a>
-    </td>
+                <td><span class="jc-ref">{{ lawyer.last_name }}</span></td>
+                <td>{{ lawyer.first_name }}</td>
+                <td>{{ lawyer.specialization }}</td>
+                <td>{{ lawyer.phone }}</td>
+                <td>{{ lawyer.email }}</td>
+                <td>
+                    <a href="{% url 'lawyer_update' lawyer.id %}" class="jc-action-btn" title="Modifier">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a href="{% url 'lawyer_delete' lawyer.id %}" class="jc-action-btn danger" title="Supprimer">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5" class="text-center">
+                <td colspan="6" class="text-center text-muted py-4">
                     Aucun avocat enregistré.
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-
 </div>
 
 {% endblock %}

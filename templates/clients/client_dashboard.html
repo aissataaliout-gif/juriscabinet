@@ -1,62 +1,293 @@
-{% extends "base.html" %}
+{% extends "layouts/dashboard.html" %}
 
-{% block content %}
+{% block dashboard_content %}
 
-<div class="text-center mb-5">
-    <h2>Bienvenue {{ request.user.first_name }} 👋</h2>
-    <p class="text-muted">
-        Espace Client JurisCabinet
-    </p>
-</div>
+<div class="container py-5">
 
-<div class="row g-4">
+    <!-- En-tête -->
+    <div class="jc-dashboard-header mb-5">
 
-    <!-- Mes dossiers -->
-    <div class="col-md-6 col-lg-3">
-        <div class="card shadow border-0 h-100">
-            <div class="card-body text-center">
-                <h5>📁 Mes dossiers</h5>
-                <a href="{% url 'dossier_list' %}" class="btn btn-primary mt-3">
-                    Ouvrir
-                </a>
+        <div>
+            <span class="jc-eyebrow">ESPACE CLIENT</span>
+
+            <h1 class="mt-2">
+                Bienvenue {{ request.user.first_name }} 
+            </h1>
+
+            <p class="mb-0">
+                Retrouvez ici toutes les informations liées à vos dossiers.
+            </p>
+        </div>
+
+        <div class="jc-user-badge">
+            <div class="jc-user-icon">
+                <i class="bi bi-person"></i>
+            </div>
+
+            <div>
+                <strong>
+                    {{ request.user.first_name }} {{ request.user.last_name }}
+                </strong>
+
+                <small>Client</small>
             </div>
         </div>
+
     </div>
 
-    <!-- Mes documents -->
-    <div class="col-md-6 col-lg-3">
-        <div class="card shadow border-0 h-100">
-            <div class="card-body text-center">
-                <h5>📄 Mes documents</h5>
-                <a href="{% url 'document_list' %}" class="btn btn-primary mt-3">
-                    Ouvrir
-                </a>
+
+    <!-- Statistiques -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-6 col-xl-3">
+            <div class="jc-stat-card">
+                <div class="jc-stat-icon jc-blue">
+                    <i class="bi bi-folder2-open"></i>
+                </div>
+
+                <div>
+                    <span>Dossiers</span>
+                    <strong>{{ dossiers_count }}</strong>
+                </div>
             </div>
         </div>
+
+
+        <div class="col-md-6 col-xl-3">
+            <div class="jc-stat-card">
+                <div class="jc-stat-icon jc-green">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+
+                <div>
+                    <span>Documents</span>
+                    <strong>{{ documents_count }}</strong>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 col-xl-3">
+            <div class="jc-stat-card">
+                <div class="jc-stat-icon jc-orange">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+
+                <div>
+                    <span>Rendez-vous</span>
+                    <strong>{{ appointments_count }}</strong>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 col-xl-3">
+            <div class="jc-stat-card">
+                <div class="jc-stat-icon jc-red">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+                <div>
+                    <span>Factures</span>
+                    <strong>{{ invoices_count }}</strong>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Mes factures -->
-    <div class="col-md-6 col-lg-3">
-        <div class="card shadow border-0 h-100">
-            <div class="card-body text-center">
-                <h5>💰 Mes factures</h5>
-                <a href="{% url 'invoice_list' %}" class="btn btn-primary mt-3">
-                    Ouvrir
-                </a>
-            </div>
-        </div>
+
+    <!-- Services -->
+    <div class="mb-4">
+
+        <span class="jc-eyebrow">
+            MES SERVICES
+        </span>
+
+        <h2 class="mt-2">
+            Votre espace juridique
+        </h2>
+
     </div>
 
-    <!-- Mes rendez-vous -->
-    <div class="col-md-6 col-lg-3">
-        <div class="card shadow border-0 h-100">
-            <div class="card-body text-center">
-                <h5>📅 Mes rendez-vous</h5>
-                <a href="{% url 'appointment_list' %}" class="btn btn-primary mt-3">
-                    Ouvrir
-                </a>
+
+    <div class="row g-4">
+
+        <!-- Dossiers -->
+        <div class="col-md-6">
+
+            <div class="jc-service-card">
+
+                <div class="jc-service-icon jc-blue">
+                    <i class="bi bi-folder2-open"></i>
+                </div>
+
+                <div class="flex-grow-1">
+
+                    <h4>Mes dossiers</h4>
+
+                    <p>
+                        Consultez l'état et les informations de vos dossiers
+                        juridiques.
+                    </p>
+
+                    <a href="{% url 'dossier_list' %}">
+                        Consulter mes dossiers
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
             </div>
+
         </div>
+
+
+        <!-- Documents -->
+        <div class="col-md-6">
+
+            <div class="jc-service-card">
+
+                <div class="jc-service-icon jc-green">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+
+                <div class="flex-grow-1">
+
+                    <h4>Mes documents</h4>
+
+                    <p>
+                        Accédez aux documents associés à vos dossiers.
+                    </p>
+
+                    <a href="{% url 'document_list' %}">
+                        Consulter mes documents
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Rendez-vous -->
+        <div class="col-md-6">
+
+            <div class="jc-service-card">
+
+                <div class="jc-service-icon jc-orange">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+
+                <div class="flex-grow-1">
+
+                    <h4>Mes rendez-vous</h4>
+
+                    <p>
+                        Retrouvez vos prochains rendez-vous avec le cabinet.
+                    </p>
+
+                    <a href="{% url 'appointment_list' %}">
+                        Voir mes rendez-vous
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Factures -->
+        <div class="col-md-6">
+
+            <div class="jc-service-card">
+
+                <div class="jc-service-icon jc-red">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+                <div class="flex-grow-1">
+
+                    <h4>Mes factures</h4>
+
+                    <p>
+                        Consultez vos factures et téléchargez vos documents.
+                    </p>
+
+                    <a href="{% url 'invoice_list' %}">
+                        Consulter mes factures
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Messagerie -->
+        <div class="col-md-6">
+
+            <div class="jc-service-card">
+
+                <div class="jc-service-icon jc-purple">
+                    <i class="bi bi-chat-dots"></i>
+                </div>
+
+                <div class="flex-grow-1">
+
+                    <h4>Messagerie</h4>
+
+                    <p>
+                        Échangez avec votre cabinet en toute simplicité.
+                    </p>
+
+                    <a href="{% url 'message_create' %}">
+                        Envoyer un message
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Notifications -->
+        <div class="col-md-6">
+
+            <div class="jc-service-card">
+
+                <div class="jc-service-icon jc-gray">
+                    <i class="bi bi-bell"></i>
+                </div>
+
+                <div class="flex-grow-1">
+
+                    <h4>Notifications</h4>
+
+                    <p>
+                        Consultez les dernières informations concernant votre
+                        espace.
+                    </p>
+
+                    <a href="#">
+                        Voir mes notifications
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>

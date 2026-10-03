@@ -1,56 +1,55 @@
 {% extends "layouts/dashboard.html" %}
 
-{% block content %}
+{% block title %}Documents{% endblock %}
 
-<div class="container mt-4">
+{% block dashboard_content %}
 
+<div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Liste des documents</h2>
 
-    <a href="{% url 'document_create' %}" class="btn btn-success mb-3">
-        ➕ Nouveau document
+    <a href="{% url 'document_create' %}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Nouveau document
     </a>
+</div>
 
-    <table class="table table-bordered">
+<div class="jc-table-card">
+    <table class="jc-table">
         <thead>
             <tr>
                 <th>Titre</th>
                 <th>Dossier</th>
                 <th>Date d'ajout</th>
-                <th>Fichier</th>
                 <th>Actions</th>
             </tr>
         </thead>
 
         <tbody>
-        {% for document in documents %}
+            {% for document in documents %}
             <tr>
-                <td>{{ document.title }}</td>
+                <td><span class="jc-ref">{{ document.title }}</span></td>
                 <td>{{ document.dossier }}</td>
                 <td>{{ document.uploaded_at }}</td>
                 <td>
-    <a href="{{ document.file.url }}" target="_blank" class="btn btn-primary btn-sm">
-        📄 Ouvrir
-    </a>
-</td>
-<td>
-    <a href="{% url 'document_update' document.id %}" class="btn btn-warning btn-sm">
-        ✏️ Modifier
-    </a>
-    <a href="{% url 'document_delete' document.id %}" class="btn btn-danger btn-sm">
-    🗑️ Supprimer
-    </a>
-</td>
+                    <a href="{{ document.file.url }}" target="_blank" class="jc-action-btn" title="Ouvrir">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </a>
+                    <a href="{% url 'document_update' document.id %}" class="jc-action-btn" title="Modifier">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a href="{% url 'document_delete' document.id %}" class="jc-action-btn danger" title="Supprimer">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
             </tr>
-        {% empty %}
+            {% empty %}
             <tr>
-                <td colspan="3" class="text-center">
+                <td colspan="4" class="text-center text-muted py-4">
                     Aucun document disponible.
                 </td>
             </tr>
-        {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
-
 </div>
 
 {% endblock %}

@@ -2,37 +2,60 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-
+from django.db import models
 from .models import Dossier
 from .forms import DossierForm
-
+from messaging.models import Message
 
 @login_required
 def dossier_list(request):
 
-    # ADMIN : voit tous les dossiers
     if request.user.role == "ADMIN":
         dossiers = Dossier.objects.all()
 
-    # CLIENT : voit uniquement ses propres dossiers
     elif request.user.role == "CLIENT":
         client = request.user.client_profile
         dossiers = Dossier.objects.filter(client=client)
 
-    # AVOCAT : temporairement, on conserve l'accès existant.
-    # Nous sécuriserons précisément ses dossiers après vérification
-    # du lien User ↔ Lawyer.
     elif request.user.role == "LAWYER":
         dossiers = Dossier.objects.all()
 
     else:
         return HttpResponseForbidden("Accès refusé.")
 
+    # Comptes par statut (calculés avant filtrage, pour les onglets)
+    all_dossiers = dossiers
+    counts = {
+        "TOUS": all_dossiers.count(),
+        "OUVERT": all_dossiers.filter(status="OUVERT").count(),
+        "EN_COURS": all_dossiers.filter(status="EN_COURS").count(),
+        "FERME": all_dossiers.filter(status="FERME").count(),
+    }
+
+    # Filtre par statut
+    status = request.GET.get("status", "")
+    if status in ["OUVERT", "EN_COURS", "FERME"]:
+        dossiers = dossiers.filter(status=status)
+
+    # Recherche par titre, client ou avocat
+    q = request.GET.get("q", "").strip()
+    if q:
+        dossiers = dossiers.filter(
+            models.Q(title__icontains=q) |
+            models.Q(client__first_name__icontains=q) |
+            models.Q(client__last_name__icontains=q) |
+            models.Q(lawyer__first_name__icontains=q) |
+            models.Q(lawyer__last_name__icontains=q)
+        )
+
     return render(
         request,
         "dossiers/dossier_list.html",
         {
-            "dossiers": dossiers
+            "dossiers": dossiers,
+            "counts": counts,
+            "current_status": status,
+            "q": q,
         }
     )
 
@@ -134,5 +157,55 @@ def dossier_delete(request, pk):
         "dossiers/dossier_confirm_delete.html",
         {
             "dossier": dossier
+        }
+    )
+
+@login_required
+def dossier_detail(request, pk):
+
+    dossier = get_object_or_404(Dossier, pk=pk)
+
+    if request.user.role == "CLIENT":
+        if dossier.client != request.user.client_profile:
+            return HttpResponseForbidden("Accès refusé à ce dossier.")
+
+    documents = dossier.documents.all()
+    appointments = dossier.appointments.order_by("appointment_date")
+    dossier_messages = dossier.messages.order_by("sent_at")
+
+    if request.method == "POST" and "content" in request.POST:
+        content = request.POST.get("content", "").strip()
+
+        if content:
+            if request.user.role == "CLIENT":
+                receiver = dossier.lawyer.user
+            else:
+                receiver = dossier.client.user
+
+            if receiver:
+                Message.objects.create(
+                    sender=request.user,
+                    receiver=receiver,
+                    dossier=dossier,
+                    subject=f"Dossier #{dossier.id}",
+                    content=content,
+                )
+                messages.success(request, "Message envoyé.")
+            else:
+                messages.error(
+                    request,
+                    "Impossible d'envoyer : aucun compte utilisateur lié à ce contact."
+                )
+
+        return redirect("dossier_detail", pk=dossier.id)
+
+    return render(
+        request,
+        "dossiers/dossier_detail.html",
+        {
+            "dossier": dossier,
+            "documents": documents,
+            "appointments": appointments,
+            "dossier_messages": dossier_messages,
         }
     )

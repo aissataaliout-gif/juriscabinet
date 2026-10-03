@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-
 from .models import Appointment
 from .forms import AppointmentForm
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 @login_required
@@ -142,5 +143,39 @@ def appointment_delete(request, pk):
         "appointments/appointment_confirm_delete.html",
         {
             "appointment": appointment
+        },
+    )
+
+@login_required
+def appointment_calendar(request):
+
+    if request.user.role == "ADMIN":
+        appointments = Appointment.objects.all()
+
+    elif request.user.role == "CLIENT":
+        client = request.user.client_profile
+        appointments = Appointment.objects.filter(dossier__client=client)
+
+    elif request.user.role == "LAWYER":
+        appointments = Appointment.objects.all()
+
+    else:
+        return HttpResponseForbidden("Accès refusé.")
+
+    events = []
+    for a in appointments:
+        events.append({
+            "title": a.title,
+            "start": a.appointment_date.isoformat(),
+            "url": f"/appointments/{a.id}/modifier/",
+        })
+
+    events_json = json.dumps(events, cls=DjangoJSONEncoder)
+
+    return render(
+        request,
+        "appointments/appointment_calendar.html",
+        {
+            "events_json": events_json,
         },
     )

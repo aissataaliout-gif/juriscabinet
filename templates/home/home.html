@@ -3,56 +3,66 @@
 
 {% block content %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css" rel="stylesheet">
 
+<nav class="navbar navbar-expand-lg navbar-dark jc-navbar shadow-sm">
     <div class="container">
 
-        <a class="navbar-brand fw-bold fs-3" href="/">
-            ⚖ JurisCabinet
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2"
+           href="{% url 'home' %}">
+            <i class="bi bi-bank"></i>
+            <span>JurisCabinet</span>
         </a>
 
         <button
             class="navbar-toggler"
+            type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#menu">
+            data-bs-target="#menu"
+            aria-controls="menu"
+            aria-expanded="false"
+            aria-label="Afficher le menu">
 
             <span class="navbar-toggler-icon"></span>
-
         </button>
 
         <div class="collapse navbar-collapse" id="menu">
 
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Accueil</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#services">Services</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#contact">Contact</a>
-                </li>
-
-                <li class="nav-item ms-3">
-
-                    <a class="btn btn-primary rounded-pill"
-                       href="{% url 'login' %}">
-
-                        Connexion
-
+                    <a class="nav-link active"
+                       href="{% url 'home' %}">
+                        Accueil
                     </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="#services">
+                        Services
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="#contact">
+                        Contact
+                    </a>
+                </li>
+
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-primary rounded-pill px-4"
+                       href="{% url 'login' %}">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                        Connexion
+                    </a>
                 </li>
 
             </ul>
 
         </div>
-
     </div>
-
 </nav>
 
 <!-- HERO -->
@@ -72,12 +82,11 @@
                 </h3>
 
                 <p class="lead mb-4">
-
-                    JurisCabinet est une plateforme moderne permettant
-                    la gestion des clients, dossiers, rendez-vous,
-                    documents juridiques, factures et messagerie
-                    sécurisée.
-
+                    JurisCabinet centralise tout ce dont un cabinet d'avocats
+                    a besoin au quotidien : suivi des dossiers juridiques,
+                    prise de rendez-vous, échanges sécurisés avec vos clients,
+                    stockage des documents et facturation — le tout depuis
+                    un seul endroit, accessible à tout moment.
                 </p>
 
                 <a href="{% url 'login' %}" class="btn btn-light btn-lg">
@@ -94,15 +103,8 @@
 
             </div>
 
-            <div class="col-lg-6 text-center">
-
-                <div class="text-center">
-
-    <i class="bi bi-bank2 text-white"
-       style="font-size:220px;"></i>
-
-</div>
-
+             <div class="col-lg-6 text-center">
+                  <div id="hero-3d" style="width: 100%; height: 380px;"></div>
             </div>
 
         </div>
@@ -115,7 +117,7 @@
 
     <div class="container">
 
-        <div class="text-center mb-5">
+        <div class="text-center mb-5" data-aos="fade-up">
 
             <h2 class="fw-bold">
                 Nos Services
@@ -129,7 +131,7 @@
 
         <div class="row g-4">
 
-            <div class="col-md-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
 
                 <div class="card border-0 shadow-lg h-100">
 
@@ -142,7 +144,9 @@
                         </h4>
 
                         <p class="text-muted">
-                            Enregistrez, recherchez et gérez facilement tous vos clients.
+                           Créez une fiche complète pour chaque client
+                            (coordonnées, profession, historique) et
+                            retrouvez-le en un instant grâce à la recherche.
                         </p>
 
                     </div>
@@ -151,7 +155,7 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
 
                 <div class="card border-0 shadow-lg h-100">
 
@@ -164,7 +168,9 @@
                         </h4>
 
                         <p class="text-muted">
-                            Suivez l'évolution des dossiers juridiques en temps réel.
+                           Chaque dossier regroupe son client, l'avocat
+                            en charge, son statut (ouvert, en cours, clôturé),
+                            ses documents et ses rendez-vous liés.
                         </p>
 
                     </div>
@@ -173,7 +179,7 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="450">
 
                 <div class="card border-0 shadow-lg h-100">
 
@@ -186,7 +192,9 @@
                         </h4>
 
                         <p class="text-muted">
-                            Organisez facilement les rendez-vous avec vos clients.
+                            Planifiez vos rendez-vous et visualisez-les
+                            en liste ou sur un calendrier mensuel complet,
+                            avec rappel automatique pour chaque partie.
                         </p>
 
                     </div>
@@ -195,7 +203,7 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
 
                 <div class="card border-0 shadow-lg h-100">
 
@@ -208,7 +216,9 @@
                         </h4>
 
                         <p class="text-muted">
-                            Centralisez tous vos documents en toute sécurité.
+                            Chaque document est directement rattaché à son
+                            dossier : contrats, pièces jointes, courriers —
+                            tout est retrouvable en un clic, sans classeur papier.
                         </p>
 
                     </div>
@@ -217,7 +227,7 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="750">
 
                 <div class="card border-0 shadow-lg h-100">
 
@@ -230,7 +240,9 @@
                         </h4>
 
                         <p class="text-muted">
-                            Gérez les paiements et les factures automatiquement.
+                            Générez vos factures, suivez leur statut
+                            (payée, en attente, impayée) et exportez-les
+                            en PDF pour vos clients.
                         </p>
 
                     </div>
@@ -239,7 +251,7 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="900">
 
                 <div class="card border-0 shadow-lg h-100">
 
@@ -252,7 +264,9 @@
                         </h4>
 
                         <p class="text-muted">
-                            Communiquez avec vos clients de manière sécurisée.
+                            Échangez directement avec votre avocat ou votre
+                            client depuis le dossier concerné — une
+                            conversation par affaire, pas de mail perdu.
                         </p>
 
                     </div>
@@ -269,7 +283,7 @@
 
 
 <section class="container py-5">
-    <div class="text-center mb-5">
+    <div class="text-center mb-5" data-aos="fade-up">
         <h2 class="fw-bold">Pourquoi choisir JurisCabinet ?</h2>
         <p class="text-muted">
             Une plateforme pensée pour simplifier la gestion quotidienne d'un cabinet d'avocats.
@@ -278,7 +292,7 @@
 
     <div class="row g-4">
 
-        <div class="col-md-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
             <div class="card border-0 shadow h-100 text-center p-4">
                 <i class="bi bi-shield-lock-fill text-primary display-4"></i>
                 <h4 class="mt-3">Sécurité</h4>
@@ -288,7 +302,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
             <div class="card border-0 shadow h-100 text-center p-4">
                 <i class="bi bi-lightning-charge-fill text-warning display-4"></i>
                 <h4 class="mt-3">Rapidité</h4>
@@ -298,7 +312,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
             <div class="card border-0 shadow h-100 text-center p-4">
                 <i class="bi bi-people-fill text-success display-4"></i>
                 <h4 class="mt-3">Collaboration</h4>
@@ -311,6 +325,100 @@
     </div>
 </section>
 
+<section class="py-5 bg-light">
+    <div class="container">
+
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold">Un espace pensé pour chacun</h2>
+            <p class="text-muted">
+                Trois façons de se connecter, trois expériences adaptées.
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+                <div class="card border-0 shadow h-100 p-4">
+                    <i class="bi bi-shield-fill-check text-primary display-5 mb-3"></i>
+                    <h4>Administrateur</h4>
+                    <p class="text-muted">
+                        Vue d'ensemble sur tout le cabinet : statistiques,
+                        gestion des clients, des avocats, des dossiers et
+                        de la facturation.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
+                <div class="card border-0 shadow h-100 p-4">
+                    <i class="bi bi-briefcase-fill text-warning display-5 mb-3"></i>
+                    <h4>Avocat</h4>
+                    <p class="text-muted">
+                        Accès à ses propres dossiers, son agenda du jour et
+                        ses échanges avec ses clients, sans surcharge
+                        d'informations inutiles.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="card border-0 shadow h-100 p-4">
+                    <i class="bi bi-person-fill text-success display-5 mb-3"></i>
+                    <h4>Client</h4>
+                    <p class="text-muted">
+                        Suivi de ses propres dossiers, ses rendez-vous, ses
+                        factures et une messagerie directe avec son avocat,
+                        en toute confidentialité.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold">Ce qu'en disent nos utilisateurs</h2>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+                <div class="card border-0 shadow h-100 p-4">
+                    <p class="fst-italic">
+                        "Je retrouve tous mes dossiers en quelques secondes,
+                        un vrai gain de temps au quotidien."
+                    </p>
+                    <p class="fw-bold mb-0 mt-3">— Me Diallo, Avocate</p>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
+                <div class="card border-0 shadow h-100 p-4">
+                    <p class="fst-italic">
+                        "Pouvoir suivre l'avancée de mon dossier et échanger
+                        directement avec mon avocat me rassure énormément."
+                    </p>
+                    <p class="fw-bold mb-0 mt-3">— Adam Traore</p>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="card border-0 shadow h-100 p-4">
+                    <p class="fst-italic">
+                        "La gestion de la facturation et des dossiers pour
+                        tout le cabinet est enfin centralisée."
+                    </p>
+                    <p class="fw-bold mb-0 mt-3">— Administrateur du cabinet</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 <section class="bg-primary text-white py-5">
     <div class="container">
@@ -342,50 +450,168 @@
     </div>
 </section>
 
+<section id="contact" class="py-5" style="background: #F5F7FA;">
+    <div class="container">
 
-<footer class="bg-dark text-white py-5">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold">Contactez-nous</h2>
+            <p class="text-muted">
+                Une question ? Écrivez-nous, nous vous répondrons rapidement.
+            </p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success">
+                                    <i class="bi bi-check-circle-fill me-2"></i>{{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form method="post" action="{% url 'contact_submit' %}">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Nom complet</label>
+                                <input type="text" name="name" class="form-control" placeholder="Votre nom" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Email</label>
+                                <input type="email" name="email" class="form-control" placeholder="vous@exemple.com" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Telephone (optionnel)</label>
+                                <input type="tel" name="phone" class="form-control" placeholder="+223 00 00 00 00" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Message</label>
+                                <textarea name="message" class="form-control" rows="4" placeholder="Comment pouvons-nous vous aider ?" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn w-100 py-2 fw-semibold text-white" style="background: #0B3A5B;">
+                                <i class="bi bi-send-fill me-2"></i>Envoyer le message
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<footer class="text-white pt-5 pb-4" style="background: #0B3A5B;">
 
     <div class="container">
 
-        <div class="row">
+        <div class="row g-4">
 
             <div class="col-md-4">
-                <h4>JurisCabinet</h4>
-                <p>
+                <h4 class="fw-bold mb-3">
+                    <i class="bi bi-bank2"></i> JurisCabinet
+                </h4>
+                <p style="color: rgba(255,255,255,0.7);">
                     Plateforme de gestion moderne pour les cabinets d'avocats.
                 </p>
             </div>
 
             <div class="col-md-4">
-                <h5>Navigation</h5>
-
+                <h6 class="text-uppercase mb-3" style="letter-spacing: 0.05em; color: #2196D3;">
+                    Navigation
+                </h6>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-white text-decoration-none">Accueil</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Services</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Contact</a></li>
+                    <li class="mb-2">
+                        <a href="{% url 'home' %}" class="text-white text-decoration-none">Accueil</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#services" class="text-white text-decoration-none">Services</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#contact" class="text-white text-decoration-none">Contact</a>
+                    </li>
                 </ul>
             </div>
 
             <div class="col-md-4">
-                <h5>Contact</h5>
-
-                <p>Email : contact@juriscabinet.com</p>
-
-                <p>Téléphone : +223 XX XX XX XX</p>
-
-                <p>Bamako - Mali</p>
+                <h6 class="text-uppercase mb-3" style="letter-spacing: 0.05em; color: #2196D3;">
+                    Contact
+                </h6>
+                <p class="mb-2">
+                    <i class="bi bi-envelope-fill me-2"></i>contact.juriscabinet@gmail.com
+                </p>
+                <p class="mb-2">
+                    <i class="bi bi-telephone-fill me-2"></i>+223 63 43 80 13
+                </p>
+                <p class="mb-0">
+                    <i class="bi bi-geo-alt-fill me-2"></i>Bamako - Mali
+                </p>
             </div>
 
         </div>
 
-        <hr>
+        <hr style="border-color: rgba(255,255,255,0.15); margin: 2rem 0 1.5rem;">
 
-        <div class="text-center">
+        <div class="text-center" style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">
             © 2026 JurisCabinet — Tous droits réservés.
         </div>
 
     </div>
 
 </footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    const container = document.getElementById('hero-3d');
+
+    if (container) {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 100);
+        camera.position.z = 5;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        const light1 = new THREE.DirectionalLight(0xffffff, 2);
+        light1.position.set(3, 2, 4);
+        scene.add(light1);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+
+        const geometry = new THREE.IcosahedronGeometry(1.6, 0);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0xffffff, metalness: 0.2, roughness: 0.3, flatShading: true
+        });
+        const shape = new THREE.Mesh(geometry, material);
+        scene.add(shape);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            shape.rotation.x += 0.004;
+            shape.rotation.y += 0.006;
+            renderer.render(scene, camera);
+        }
+        animate();
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 700,
+        once: true,
+        offset: 80,
+    });
+</script>
 
 {% endblock %}

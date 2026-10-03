@@ -130,7 +130,18 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 AUTH_USER_MODEL = 'accounts.User'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "aissataatraore50@gmail.com"
+EMAIL_HOST_PASSWORD = "anruqvosapnkvpny"
+DEFAULT_FROM_EMAIL = "JurisCabinet <aissataatraore50@gmail.com>"

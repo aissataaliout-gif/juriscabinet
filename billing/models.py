@@ -6,6 +6,7 @@ class Invoice(models.Model):
     STATUS_CHOICES = [
         ("PENDING", "En attente"),
         ("PAID", "Payée"),
+        ("OVERDUE", "Impayée"),
     ]
 
     dossier = models.ForeignKey(

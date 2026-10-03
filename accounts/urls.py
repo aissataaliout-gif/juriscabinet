@@ -9,4 +9,8 @@ urlpatterns = [
     path("dashboard/admin/", views.admin_dashboard, name="admin_dashboard"),
 
     path("register/", views.register_view, name="register"),
+
+    path("profil/", views.profile_view, name="profile"),
+
+    path("contact/", views.contact_submit, name="contact_submit"),
 ]

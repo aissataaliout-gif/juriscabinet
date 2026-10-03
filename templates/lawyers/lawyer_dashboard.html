@@ -1,63 +1,325 @@
-{% extends "base.html" %}
+{% extends "layouts/dashboard.html" %}
 
-{% block content %}
+{% block dashboard_content %}
 
-<div class="container mt-5">
+<div class="jc-dashboard">
 
-    <div class="text-center mb-5">
-        <h2>Bienvenue Maître {{ request.user.first_name }} 👋</h2>
-        <p class="text-muted">
-            Espace Avocat JurisCabinet
-        </p>
+    <!-- En-tête -->
+    <div class="jc-dashboard-header">
+
+        <div>
+            <span class="jc-dashboard-eyebrow">
+                ESPACE AVOCAT
+            </span>
+
+            <h1>
+                Bonjour Maître {{ request.user.first_name }}
+            </h1>
+
+            <p>
+                Gérez votre activité juridique depuis votre espace JurisCabinet.
+            </p>
+        </div>
+
+        <div class="jc-dashboard-user">
+            <div class="jc-dashboard-avatar">
+                <i class="bi bi-person"></i>
+            </div>
+
+            <div>
+                <strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong>
+                <span>Avocat</span>
+            </div>
+        </div>
+
     </div>
 
+        <!-- Statistiques -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-6 col-xl-3">
+            <div class="jc-stat-card">
+                <div class="jc-stat-icon jc-blue"><i class="bi bi-folder2-open"></i></div>
+                <div>
+                    <span>Mes dossiers</span>
+                    <strong>{{ dossiers_count }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="jc-stat-card">
+                <div class="jc-stat-icon jc-orange"><i class="bi bi-calendar-event"></i></div>
+                <div>
+                    <span>Rendez-vous</span>
+                    <strong>{{ appointments_count }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="jc-stat-card">
+                <div class="jc-stat-icon jc-green"><i class="bi bi-people-fill"></i></div>
+                <div>
+                    <span>Clients</span>
+                    <strong>{{ clients_count }}</strong>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Dossiers récents + agenda du jour -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted mb-3">Mes dossiers récents</h6>
+
+                    {% for d in recent_dossiers %}
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div>
+                                <strong>#{{ d.id }}</strong> — {{ d.title }}
+                                <div class="small text-muted">{{ d.client }}</div>
+                            </div>
+                            <span class="badge
+                                {% if d.status == 'OUVERT' %}bg-primary
+                                {% elif d.status == 'EN_COURS' %}bg-warning text-dark
+                                {% else %}bg-secondary{% endif %}">
+                                {{ d.get_status_display }}
+                            </span>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted small mb-0">Aucun dossier.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted mb-3">Mon agenda aujourd'hui</h6>
+
+                    {% for a in today_appointments %}
+                        <div class="py-2 border-bottom">
+                            <strong>{{ a.appointment_date|date:"H:i" }}</strong> — {{ a.title }}
+                            <div class="small text-muted">{{ a.dossier }}</div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted small mb-0">Rien de prévu aujourd'hui.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Modules principaux -->
     <div class="row g-4">
 
-        <div class="col-md-3">
-            <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>👥 Clients</h5>
-                    <a href="{% url 'client_list' %}" class="btn btn-primary mt-3">
-                        Ouvrir
-                    </a>
+        <!-- Clients -->
+        <div class="col-md-6 col-xl-3">
+
+            <div class="jc-module-card">
+
+                <div class="jc-module-icon jc-icon-blue">
+                    <i class="bi bi-people-fill"></i>
                 </div>
+
+                <div class="jc-module-content">
+
+                    <h3>Clients</h3>
+
+                    <p>
+                        Consultez et gérez les informations de vos clients.
+                    </p>
+
+                    <a href="{% url 'client_list' %}" class="jc-module-link">
+                        Gérer les clients
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
             </div>
+
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>📁 Dossiers</h5>
-                    <a href="{% url 'dossier_list' %}" class="btn btn-primary mt-3">
-                        Ouvrir
-                    </a>
+
+        <!-- Dossiers -->
+        <div class="col-md-6 col-xl-3">
+
+            <div class="jc-module-card">
+
+                <div class="jc-module-icon jc-icon-gold">
+                    <i class="bi bi-folder-fill"></i>
                 </div>
+
+                <div class="jc-module-content">
+
+                    <h3>Dossiers</h3>
+
+                    <p>
+                        Consultez et gérez les dossiers juridiques.
+                    </p>
+
+                    <a href="{% url 'dossier_list' %}" class="jc-module-link">
+                        Gérer les dossiers
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
             </div>
+
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>📄 Documents</h5>
-                    <a href="{% url 'document_list' %}" class="btn btn-primary mt-3">
-                        Ouvrir
-                    </a>
+
+        <!-- Documents -->
+        <div class="col-md-6 col-xl-3">
+
+            <div class="jc-module-card">
+
+                <div class="jc-module-icon jc-icon-green">
+                    <i class="bi bi-file-earmark-text-fill"></i>
                 </div>
+
+                <div class="jc-module-content">
+
+                    <h3>Documents</h3>
+
+                    <p>
+                        Accédez aux documents associés aux dossiers.
+                    </p>
+
+                    <a href="{% url 'document_list' %}" class="jc-module-link">
+                        Gérer les documents
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
             </div>
+
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>💰 Factures</h5>
-                    <a href="{% url 'invoice_list' %}" class="btn btn-primary mt-3">
-                        Ouvrir
-                    </a>
+
+        <!-- Factures -->
+        <div class="col-md-6 col-xl-3">
+
+            <div class="jc-module-card">
+
+                <div class="jc-module-icon jc-icon-red">
+                    <i class="bi bi-credit-card-fill"></i>
                 </div>
+
+                <div class="jc-module-content">
+
+                    <h3>Facturation</h3>
+
+                    <p>
+                        Consultez et gérez les factures du cabinet.
+                    </p>
+
+                    <a href="{% url 'invoice_list' %}" class="jc-module-link">
+                        Gérer les factures
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
             </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Accès rapides -->
+    <div class="jc-dashboard-section">
+
+        <div class="jc-section-heading">
+
+            <div>
+                <span class="jc-dashboard-eyebrow">
+                    ACCÈS RAPIDES
+                </span>
+
+                <h2>Outils du cabinet</h2>
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <!-- Rendez-vous -->
+            <div class="col-md-6 col-lg-4">
+
+                <a href="{% url 'appointment_list' %}" class="jc-quick-card">
+
+                    <div class="jc-quick-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+
+                    <div>
+                        <h4>Rendez-vous</h4>
+                        <p>Organisez vos rendez-vous avec vos clients.</p>
+                    </div>
+
+                    <i class="bi bi-arrow-up-right jc-quick-arrow"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- Messagerie -->
+            <div class="col-md-6 col-lg-4">
+
+                <a href="{% url 'inbox' %}" class="jc-quick-card">
+
+                    <div class="jc-quick-icon">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+
+                    <div>
+                        <h4>Messagerie</h4>
+                        <p>Consultez vos échanges avec vos clients.</p>
+                    </div>
+
+                    <i class="bi bi-arrow-up-right jc-quick-arrow"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- Notifications -->
+            <div class="col-md-6 col-lg-4">
+
+                <a href="{% url 'notification_list' %}" class="jc-quick-card">
+
+                    <div class="jc-quick-icon">
+                        <i class="bi bi-bell"></i>
+                    </div>
+
+                    <div>
+                        <h4>Notifications</h4>
+                        <p>Consultez vos dernières notifications.</p>
+                    </div>
+
+                    <i class="bi bi-arrow-up-right jc-quick-arrow"></i>
+
+                </a>
+
+            </div>
+
         </div>
 
     </div>
 
 </div>
+
 {% endblock %}
